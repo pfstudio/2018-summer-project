@@ -1,0 +1,4 @@
+/runtime
+/backup/logs
+/config/config.php
+/install/install.lock
