@@ -29,7 +29,9 @@
 
 				<div class="gray_box">
 					<div class="box" style="height:314px; overflow-y:auto">
-						协议不存在的，有问题百度。
+						<p>协议不存在的，有问题百度。</p>
+						<p>为了方便测试，已运行重复安装，但在重新安装后数据将会情况，若有需要请及时备份。</p>
+						<p>由于一些不可知情况，安装错误不一定会有提示。请在安装后检查数据库中的表。</p>
 					</div>
 				</div>
 				<p class="agree"><label><input type="checkbox" id='agree' /> 我同意上述条款和条件</label></p>

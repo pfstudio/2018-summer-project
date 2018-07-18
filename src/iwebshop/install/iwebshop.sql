@@ -6,13 +6,18 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 DROP TABLE IF EXISTS `{pre}user`;
 CREATE TABLE `{pre}user` (
-  `id` int(11) unsigned NOT NULL auto_increment,
-  `username` varchar(20) NOT NULL COMMENT '用户名',
-  `password` char(32) NOT NULL COMMENT '密码',
-  `head_ico` varchar(255) default NULL COMMENT '头像',
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `phone` varchar(50) NOT NULL COMMENT '个人电话-用于登陆和找回密码',
+  `role` tinyint(1) NOT NULL DEFAULT 0 COMMENT '用户身份 0: 学生 1: 教师',
+  `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: 未删除 1: 已删除',
+  `is_lock` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: 未锁定 1: 已锁定',
+  `create_time` datetime(0) DEFAULT NULL COMMENT '加入时间',
+  `last_time` datetime(0) DEFAULT NULL COMMENT '上次登陆时间',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户表';
+  UNIQUE KEY (`phone`),
+  INDEX `is_del` (`is_del`),
+  INDEX `is_lock` (`is_lock`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户表-对应账号操作';
 
 -- --------------------------------------------------------
 
@@ -22,21 +27,16 @@ CREATE TABLE `{pre}user` (
 
 DROP TABLE IF EXISTS `{pre}student`;
 CREATE TABLE `{pre}student`  (
-  `user_id` int(11) UNSIGNED NOT NULL COMMENT '用户id',
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '用户ID',
   `name` varchar(50) DEFAULT NULL COMMENT '真实姓名',
-  `phone` varchar(50) DEFAULT NULL COMMENT '个人电话',
   `parents_phone` varchar(50) DEFAULT NULL COMMENT '父母联系方式',
-  `area` varchar(255) DEFAULT NULL COMMENT '所在地区',
   `address` varchar(255) DEFAULT NULL COMMENT '联系地址',
-  `qq` varchar(20) DEFAULT NULL COMMENT 'qq号',
   `wechat` varchar(50) DEFAULT NULL COMMENT '微信号',
   `sex` tinyint(1) NOT NULL DEFAULT 0 COMMENT '性别 0: 男 1: 女',
   `birthday` date DEFAULT NULL COMMENT '生日',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '用户状态 0: 正常 1: 已删除 2: 锁定',
-  `last_login` datetime(0) DEFAULT NULL COMMENT '上次登陆时间',
-  `email` varchar(255) DEFAULT NULL COMMENT 'Email',
   `grade` varchar(50) DEFAULT NULL COMMENT '年级',
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`user_id`),
+  INDEX `wechat` (`wechat`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '学生信息表';
 
 -- --------------------------------------------------------
@@ -47,28 +47,17 @@ CREATE TABLE `{pre}student`  (
 
 DROP TABLE IF EXISTS `{pre}teacher`;
 CREATE TABLE `{pre}teacher`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '教师ID',
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '用户ID',
   `name` varchar(50) NOT NULL COMMENT '姓名',
-  `username` varchar(50) NOT NULL COMMENT '登录名',
-  `password` char(32) NOT NULL COMMENT '密码',
   `sex` tinyint(1) DEFAULT 0 COMMENT '性别 0: 男 1: 女',
-  `create_time` datetime(0) DEFAULT NULL COMMENT '加入时间',
-  `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: 未删除 1: 已删除',
-  `is_lock` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: 未锁定 1: 已锁定',
   `email` varchar(255) NOT NULL DEFAULT '' COMMENT '电子邮箱',
-  `phone` varchar(50) NOT NULL COMMENT '手机号',
-  `qq` varchar(20) DEFAULT NULL COMMENT 'QQ',
-  `wechat` varchar(50) DEFAULT NULL COMMENT '微信',
+  `wechat` varchar(50) DEFAULT NULL COMMENT '微信号',
   `photo` varchar(255) DEFAULT '' COMMENT '照片',
   `introduction` text COMMENT '介绍',
-  PRIMARY KEY (`id`, `_hash`),
-  UNIQUE INDEX `username`(`username`),
-  INDEX `username_password`(`username`, `password`),
-  INDEX `name`(`name`),
-  INDEX `is_del`(`is_del`),
-  INDEX `is_lock`(`is_lock`),
-  INDEX `email`(`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教师表';
+  PRIMARY KEY (`user_id`),
+  INDEX `wechat` (`wechat`),
+  INDEX `email` (`email`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教师信息表';
 
 -- --------------------------------------------------------
 
@@ -78,18 +67,22 @@ CREATE TABLE `{pre}teacher`  (
 
 DROP TABLE IF EXISTS `{pre}admin`;
 CREATE TABLE `{pre}admin` (
-  `id` int(11) unsigned NOT NULL auto_increment COMMENT '管理员ID',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
   `admin_name` varchar(20) NOT NULL COMMENT '用户名',
   `password` varchar(32) NOT NULL COMMENT '密码',
-  `role_id` int(11) unsigned NOT NULL COMMENT '角色ID',
-  `create_time` datetime default NULL COMMENT '创建时间',
+  `phone` varchar(50) default NULL COMMENT '电话',
   `email` varchar(255) default NULL COMMENT 'Email',
+  `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: 未删除 1: 已删除',
+  `is_lock` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: 未锁定 1: 已锁定',
+  `create_time` datetime(0) DEFAULT NULL COMMENT '加入时间',
+  `last_time` datetime(0) DEFAULT NULL COMMENT '上次登陆时间',
   `last_ip` varchar(30) default NULL COMMENT '最后登录IP',
-  `last_time` datetime default NULL COMMENT '最后登录时间',
-  `is_del` tinyint(1) NOT NULL default '0' COMMENT '删除状态 1删除,0正常',
   PRIMARY KEY  (`id`),
-  index (`admin_name`),
-  index (`role_id`)
+  UNIQUE INDEX `admin_name` (`admin_name`),
+  INDEX `phone` (`phone`),
+  INDEX `email` (`email`),
+  INDEX `is_del` (`is_del`),
+  INDEX `is_lock` (`is_lock`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='管理员用户表';
 
 -- --------------------------------------------------------
@@ -106,8 +99,8 @@ CREATE TABLE `{pre}course`  (
   `introduction` text COMMENT '课程介绍',
   `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '课程状态 0 正常 1 已删除 2 不可开班',
   PRIMARY KEY (`id`),
-  INDEX `status`(`status`),
-  INDEX `name`(`name`)
+  INDEX `name`(`name`),
+  INDEX `status`(`status`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '课程信息表';
 
 -- --------------------------------------------------------
@@ -128,6 +121,7 @@ CREATE TABLE `{pre}class`  (
   `comment` text COMMENT '对教学班的说明 - 仅对内可见',
   `status` tinyint(1) NULL DEFAULT 0 COMMENT '教学班状态 0: 正常 1: 不可报名',
   PRIMARY KEY (`id`),
+  INDEX `course_id` (`course_id`),
   INDEX `name`(`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教学班表';
 
@@ -143,8 +137,8 @@ CREATE TABLE `{pre}class_student`  (
   `class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
   `student_id` int(11) UNSIGNED NOT NULL COMMENT '学生id',
   PRIMARY KEY (`id`),
-  INDEX `class_id`(`class_id`),
-  INDEX `student_id`(`student_id`)
+  INDEX `class_id` (`class_id`),
+  INDEX `student_id` (`student_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教学班与学生关系表';
 
 -- --------------------------------------------------------
@@ -159,8 +153,8 @@ CREATE TABLE `{pre}class_teacher`  (
   `class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
   `teacher_id` int(11) UNSIGNED NOT NULL COMMENT '教师id',
   PRIMARY KEY (`id`),
-  INDEX `class_id`(`class_id`),
-  INDEX `teacher_id`(`teacher_id`)
+  INDEX `class_id` (`class_id`),
+  INDEX `teacher_id` (`teacher_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教学班和老师的关系表';
 
 -- --------------------------------------------------------
@@ -204,3 +198,4 @@ CREATE TABLE `{pre}plugin` (
 --
 
 ALTER TABLE `{pre}student` ADD foreign key(user_id) references `{pre}user`(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `{pre}teacher` ADD foreign key(user_id) references `{pre}user`(id) ON UPDATE CASCADE ON DELETE CASCADE;
