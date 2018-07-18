@@ -1,4 +1,6 @@
-/runtime
-/backup/logs
+/runtime/*
+!/runtime/.htaccess
+/upload/*
+!/upload/.htaccess
+/backup/logs/*
 /config/config.php
-/install/install.lock
