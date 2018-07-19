@@ -162,7 +162,7 @@ Token计划采用JWT Token的形式。
     - id 教学班ID
   - 权限: None
   - success:
-    - {class}
+    - {class} 教学班信息
 - /List 获取教学班列表
   - 参数:
     - page 页码(默认 1)
@@ -170,6 +170,8 @@ Token计划采用JWT Token的形式。
     - course_id (可选)课程ID
     - name (可选)教学班名称
   - 权限: None
+  - success:
+    - [classes] 教学班列表
 - /Create 新建教学班
   - 参数:
     - course_id 课程ID
@@ -179,6 +181,8 @@ Token计划采用JWT Token的形式。
     - total_num (可选)教学班容量上限
     - comment (可选)教学班注释，仅对内可见
   - 权限: class.write.all
+  - success:
+    - id 教学班ID
 - /Update 更新教学班信息
   - 参数:
     - id 教学班ID
@@ -189,41 +193,54 @@ Token计划采用JWT Token的形式。
     - comment (可选)教学班注释，仅对内可见
     - status 教学班状态(0: 正常,1: 不可报名;默认 0)
   - 权限: class.write.*
+  - success:
+    - {class} 教学班信息
 - /Delete 删除教学班
   - 参数:
     - id 教学班ID
     - true_del 软/硬删除(true: 硬, false: 软; 默认 false)
   - 权限: class.write.all
+  - success: null
 - /Register 报名
   - 参数:
     - id 教学班ID
   - 权限: user.read.owner
+  - success: null
 - /RegisterWithUser 后台添加报名
   - 参数:
     - id 教学班ID
     - user_id 学生ID
   - 权限: class.write.*
+  - success: null
 - /AddTeacher 为教学班添加教师
   - 参数:
     - id 教学班ID
     - teacher_id 教师ID
   - 权限: class.write.all
+  - success: null
 - /RemoveTeacher 移除教学班的教师
   - 参数:
     - id 教学班ID
     - teacher_id 教师ID
   - 权限: class.write.all
+  - success: null
 - /GetComment 获取教学班的备注信息
   - 参数:
     - id 教学班ID
   - 权限: class.read.*
+  - success:
+    - comment 教学班的备注信息
 - /GetTeachers 获取教学班的授课老师
   - 参数:
     - id 教学班ID
   - 权限: None
+  - success:
+    - [teachers] 教师列表
 - /GetStudents 获取教学班的学生
   - 参数:
     - id 教学班ID
     - page 页码(默认 1)
     - pagesize 每页数量(默认 20)
   - 权限: None
+  - success:
+    - [students] 学生列表
