@@ -37,6 +37,8 @@
 2. All   全体权限
   对任意资源进行授权。
 
+可用*匹配任意权限。
+
 ### 资源所有权的判定
 
 因为资源的存储格式不同，无法提供统一的判断逻辑。
@@ -63,30 +65,37 @@ Token计划采用JWT Token的形式。
 
 包括用户（学生/教师）统一性接口，以及账号相关操作。
 
-- /CreateWithPhone 用户自主注册
+- /CreateWithPhone 学生自主注册
   - 参数:
     - phone 手机号
     - pin 短信验证码
-    - role 角色(0: 学生, 1: 教师; 默认0)
   - 权限: None
+  - success:
+    - token JWT Token
 - /CreateStudent 后台添加学生
   - 参数:
     - phone 手机号
   - 权限: user.write.all;student.write.all
+  - success:
+    - id 学生ID
 - /CreateTeacher 后台添加教师
   - 参数:
     - phone 手机号
   - 权限: user.write.all;teacher.write.all
+  - success:
+    - id 教师ID
 - /Delete 删除用户
   - 参数:
     - id 用户ID
     - true_del 软/硬删除(true: 硬, false: 软; 默认 false)
   - 权限: user.write.all;student.write.all;teacher.write.all
+  - success: null
 - /ChangePhone 更换手机号
   - 参数:
     - phone 新手机号
     - pin 短信验证码
-  - 权限: user.write.owner
+  - 权限: user.write.*
+  - success: null
 
 ## 短信验证码 SMS
 
@@ -95,9 +104,12 @@ Token计划采用JWT Token的形式。
 - /SendPINWithPhone 发送登陆/用短信验证码
   - 参数:
     - phone 手机号
+  - 权限: None
+  - success: null
 - /SendPIN 发送短信验证码
   - 参数: 无
-  - 权限: 
+  - 权限: user.read.owner
+  - success: null
 
 ## 课程 course
 
@@ -106,26 +118,40 @@ Token计划采用JWT Token的形式。
 - /Get 获取单条课程信息
   - 参数:
     - id 课程ID
+  - 权限: None
+  - success:
+    - {course} 课程信息
 - /List 获取课程列表
   - 参数:
     - page 页码(默认 1)
     - pagesize 每页数量(默认 20)
     - name (可选)课程名称，可以模糊匹配
+  - 权限: None
+  - success:
+    - [courses] 课程信息列表
 - /Create 添加课程
   - 参数:
     - name 课程名称
     - price (可选)课程价格
     - introduction (可选)课程简介
+  - 权限: course.write.all
+  - success:
+    - {course} 课程信息
 - /Update 更新课程信息
   - 参数:
     - id 课程ID
     - name (可选)课程名称
     - price (可选)课程价格
     - introduction (可选)课程简介
+  - 权限: course.write.all
+  - success:
+    - {course} 课程信息
 - /Delete 删除课程
   - 参数:
     - id 课程ID
     - true_del 软/硬删除(true: 硬, false: 软; 默认 false)
+  - 权限: course.write.all
+  - success: null
 
 ## 教学班 class
 
@@ -134,6 +160,70 @@ Token计划采用JWT Token的形式。
 - /Get 获取单条教学班信息
   - 参数:
     - id 教学班ID
+  - 权限: None
+  - success:
+    - {class}
 - /List 获取教学班列表
   - 参数:
-    
+    - page 页码(默认 1)
+    - pagesize 每页数量(默认 20)
+    - course_id (可选)课程ID
+    - name (可选)教学班名称
+  - 权限: None
+- /Create 新建教学班
+  - 参数:
+    - course_id 课程ID
+    - name (可选)教学班名称,若为空则继承课程名称
+    - price (可选)教学班价格,若为空则继承课程价格
+    - introduction (可选)教学班介绍,若为空则继承课程简介
+    - total_num (可选)教学班容量上限
+    - comment (可选)教学班注释，仅对内可见
+  - 权限: class.write.all
+- /Update 更新教学班信息
+  - 参数:
+    - id 教学班ID
+    - name (可选)教学班名称
+    - price (可选)教学班价格
+    - introduction (可选)教学班介绍
+    - total_num (可选)教学班容量上限
+    - comment (可选)教学班注释，仅对内可见
+    - status 教学班状态(0: 正常,1: 不可报名;默认 0)
+  - 权限: class.write.*
+- /Delete 删除教学班
+  - 参数:
+    - id 教学班ID
+    - true_del 软/硬删除(true: 硬, false: 软; 默认 false)
+  - 权限: class.write.all
+- /Register 报名
+  - 参数:
+    - id 教学班ID
+  - 权限: user.read.owner
+- /RegisterWithUser 后台添加报名
+  - 参数:
+    - id 教学班ID
+    - user_id 学生ID
+  - 权限: class.write.*
+- /AddTeacher 为教学班添加教师
+  - 参数:
+    - id 教学班ID
+    - teacher_id 教师ID
+  - 权限: class.write.all
+- /RemoveTeacher 移除教学班的教师
+  - 参数:
+    - id 教学班ID
+    - teacher_id 教师ID
+  - 权限: class.write.all
+- /GetComment 获取教学班的备注信息
+  - 参数:
+    - id 教学班ID
+  - 权限: class.read.*
+- /GetTeachers 获取教学班的授课老师
+  - 参数:
+    - id 教学班ID
+  - 权限: None
+- /GetStudents 获取教学班的学生
+  - 参数:
+    - id 教学班ID
+    - page 页码(默认 1)
+    - pagesize 每页数量(默认 20)
+  - 权限: None
