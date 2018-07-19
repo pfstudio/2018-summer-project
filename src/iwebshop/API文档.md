@@ -65,6 +65,13 @@ Token计划采用JWT Token的形式。
 
 包括用户（学生/教师）统一性接口，以及账号相关操作。
 
+- /Login 登陆
+  - 参数:
+    - phone 手机号
+    - pin 短信验证码
+  - 权限: None
+  - success:
+    - token JWT Token
 - /CreateWithPhone 学生自主注册
   - 参数:
     - phone 手机号
