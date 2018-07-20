@@ -1,0 +1,47 @@
+## 学生 student
+- /Get 获取单条学生信息
+  - 参数:
+    - user_id 学生信息ID
+  - 权限: student.read.*
+  - success:
+    - {student}
+- /List 获取所有学生信息
+  - 参数:
+    - page 页码(默认 1)
+    - pagesize 每页数量(默认 20)
+    - name (可选)学生姓名
+  - 权限: student.read.
+- /Creat 新建学生
+  - 参数:
+    - user_id 学生ID  
+    - parents_phone 家长手机
+    - address 学生地址
+    - wechat  学生微信号
+    - sex (可选)学生性别
+    - birthday (可选)学生生日
+    - grade (可选)学生年级
+  - 权限: student.write.all
+- /Delete 删除单条学生信息
+  - 参数: 
+    - id 学生信息ID
+    - true_del 软/硬删除(true: 硬, false: 软; 默认 false)   
+  - 权限: student.write.all
+- /Update 更新学生信息
+  - 参数:
+    - parents_phone (可选)家长手机
+    - address (可选)学生地址
+    - wechat  (可选)学生微信号
+    - sex (可选)学生性别
+    - birthday (可选)学生生日
+    - grade (可选)学生年级
+  - 权限: student.write.*
+- /AddTeacher 为教学班添加学生
+  - 参数:
+    - id 教学班ID
+    - student_id 学生ID
+  - 权限: class.write.all
+- /RemoveStudent 移除教学班的学生
+  - 参数:
+    - id 教学班ID
+    - student_id 学生ID
+  - 权限: class.write.all
