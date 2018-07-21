@@ -61,17 +61,68 @@ Token计划采用JWT Token的形式。
 - role 身份（student 学生/teacher 教师/admin 管理员）
 - name 姓名
 
-## 用户相关 User
+## 符号说明
 
-包括用户（学生/教师）统一性接口，以及账号相关操作。
+- {type} 返回单个某类型的资源
+- [types] 返回某类型资源的列表
+- type@prop 表示对应type的类型的prop属性
+- {type:prop}/[types:prop] 使用prop限制资源的内容
 
-- /Login 登陆
+## 登陆/授权 Auth
+
+- /Login 登陆(学生/教师)
   - 参数:
     - phone 手机号
     - pin 短信验证码
   - 权限: None
   - success:
     - token JWT Token
+- /AdminLogin 管理员登陆
+  - 参数:
+    - admin_name 管理员用户名
+    - password 密码
+  - 权限: None
+  - success:
+    - token JWT Token
+- /Logout 登出
+  > 将token列入黑名单
+  - 参数:
+    - token JWT Token
+  - 权限: None
+  - success: null
+- /RefreshToken 刷新Token
+  - 参数:
+    - token JWT Token
+  - 权限: None
+  - success:
+    - token 新的JWT Token
+- /WechatLogin 微信登陆
+  - 待定
+- /WechatBind 绑定微信
+  - 待定
+
+## 公开信息 Public
+
+- /Get 获取一条指定类型的公开信息
+  - 参数:
+    - id type@ID
+    - type 指定的资源类型
+  - 权限: None
+  - success:
+    - {type:public} {type}的公开信息
+- /List 获取指定类型的公开信息列表
+  - 参数:
+    - type 指定的资源类型
+    - page 页码(默认 1)
+    - pagesize 每页数量(默认 20)
+  - 权限: None
+  - success:
+    - [types:public] {type}的公开信息列表
+
+## 用户相关 User
+
+包括用户（学生/教师）统一性接口，以及账号相关操作。
+
 - /CreateWithPhone 学生自主注册
   - 参数:
     - phone 手机号
@@ -114,7 +165,7 @@ Token计划采用JWT Token的形式。
   - 权限: None
   - success: null
 - /SendPIN 发送短信验证码
-  - 参数: 无
+  - 参数: None
   - 权限: user.read.owner
   - success: null
 
@@ -125,7 +176,7 @@ Token计划采用JWT Token的形式。
 - /Get 获取单条课程信息
   - 参数:
     - id 课程ID
-  - 权限: None
+  - 权限: course.read.*
   - success:
     - {course} 课程信息
 - /List 获取课程列表
@@ -133,7 +184,7 @@ Token计划采用JWT Token的形式。
     - page 页码(默认 1)
     - pagesize 每页数量(默认 20)
     - name (可选)课程名称，可以模糊匹配
-  - 权限: None
+  - 权限: course.read.all
   - success:
     - [courses] 课程信息列表
 - /Create 添加课程
@@ -160,23 +211,25 @@ Token计划采用JWT Token的形式。
   - 权限: course.write.all
   - success: null
 
-## 教学班 class
+## 教学班 Class
 
 教学班信息
 
 - /Get 获取单条教学班信息
   - 参数:
     - id 教学班ID
-  - 权限: None
+  - 权限: class.read.*
   - success:
     - {class} 教学班信息
 - /List 获取教学班列表
   - 参数:
     - page 页码(默认 1)
     - pagesize 每页数量(默认 20)
+    - page 页码(默认 1)
+    - pagesize 每页数量(默认 20)
     - course_id (可选)课程ID
     - name (可选)教学班名称
-  - 权限: None
+  - 权限: class.read.all
   - success:
     - [classes] 教学班列表
 - /Create 新建教学班
@@ -213,7 +266,18 @@ Token计划采用JWT Token的形式。
     - id 教学班ID
   - 权限: user.read.owner
   - success: null
-- /RegisterWithUser 后台添加报名
+- /UnRegister 取消报名
+  - 参数:
+    - id 教学班ID
+  - 权限: user.read.owner
+  - success: null
+- /AddStudent 为教学班添加学生
+  - 参数:
+    - id 教学班ID
+    - user_id 学生ID
+  - 权限: class.write.*
+  - success: null
+- /RemoveStudent 移除教学班的学生
   - 参数:
     - id 教学班ID
     - user_id 学生ID
@@ -231,18 +295,12 @@ Token计划采用JWT Token的形式。
     - teacher_id 教师ID
   - 权限: class.write.all
   - success: null
-- /GetComment 获取教学班的备注信息
-  - 参数:
-    - id 教学班ID
-  - 权限: class.read.*
-  - success:
-    - comment 教学班的备注信息
 - /GetTeachers 获取教学班的授课老师
   - 参数:
     - id 教学班ID
   - 权限: None
   - success:
-    - [teachers] 教师列表
+    - [teachers:public] 教师公开信息列表
 - /GetStudents 获取教学班的学生
   - 参数:
     - id 教学班ID
@@ -250,4 +308,131 @@ Token计划采用JWT Token的形式。
     - pagesize 每页数量(默认 20)
   - 权限: None
   - success:
-    - [students] 学生列表
+    - [students:public] 学生公开信息列表
+- /GetClassesWithTeacher 获取教师教授的教学班
+  - 参数:
+    - id 教师ID
+    - page 页码(默认 1)
+    - pagesize 每页数量(默认 20)
+  - 权限: None
+  - success:
+    - [classes:public] 教学班公开信息列表
+
+## 教师相关
+
+教师统一性接口，以及账号相关操作。
+
+- /Get 获取单条教师信息
+  - 参数:
+    - id 教师ID
+  - 权限: teacher.read.*
+  - success:
+    - {teacher} 教师信息
+- /List 获取教师信息
+  - 参数:
+    - page 页码(默认 1)
+    - pagesize 每页数量(默认 20)
+    - name (可选)教师姓名
+  - 权限: teacher.read.all
+  - success:
+    - [teachers] 教师信息列表
+- /Update 更新教师信息
+  - 参数:
+    - id 教师ID
+    - name 真实姓名
+    - sex 性别
+    - email 电子邮件
+    - wechat 微信号
+    - photo 教师照片URL
+    - introduction 教师介绍
+  - 权限: teacher.write.*
+  - success:
+    - {teacher} 修改后的教师信息
+- /Delete 删除教师
+  - 参数:
+    - id 教师ID
+    - true_del 软/硬删除(true: 硬, false: 软; 默认 false)
+  - 权限: teacher.write.all
+  - success: null
+- /GetClasses 获取教师所教授的教学班
+  - 参数: None
+  - 权限: teacher.read.owner
+  - success:
+    - [classes] 教学班列表
+
+## 学生 student
+
+- /Get 获取单条学生信息
+  - 参数:
+    - id 学生ID
+  - 权限: student.read.*
+  - success:
+    - {student} 学生信息
+- /List 获取学生信息
+  - 参数:
+    - page 页码(默认 1)
+    - pagesize 每页数量(默认 20)
+    - name (可选)学生姓名
+  - 权限: student.read.all
+  - success:
+    - [students] 学生信息列表
+- /Update 更新学生信息
+  - 参数:
+    - id 学生ID
+    - parents_phone (可选)家长手机
+    - address (可选)学生地址
+    - wechat  (可选)学生微信号
+    - sex (可选)学生性别
+    - birthday (可选)学生生日
+    - grade (可选)学生年级
+  - 权限: student.write.*
+  - success:
+    - {student} 修改后的学生信息
+- /Delete 删除学生
+  - 参数:
+    - id 学生ID
+    - true_del 软/硬删除(true: 硬, false: 软; 默认 false)
+  - 权限: student.write.all
+  - success: null
+- /GetClasses 获取学生上课的教学班
+  - 参数: None
+  - 权限: student.read.owner
+  - success:
+    - [classes] 教学班列表
+
+## 管理员 admin
+
+- /Get 获取管理员信息
+  - 参数:
+    - id 管理员ID
+  - 权限: admin.read.*
+  - success:
+    - {admin} 管理员信息
+- /List 获得管理员列表
+  - 参数:
+    - page 页码(默认 1)
+    - pagesize 每页数量(默认 20)
+  - 权限: admin.read.all
+  - success:
+    - [admins] 管理员列表
+- /Create 添加管理员
+  - 参数:
+    - admin_name 用户名
+    - password 密码
+    - email 邮箱
+    - phone 手机
+  - 权限: admin.write.all
+  - success: null
+- /Update 更新管理员信息
+  - 参数:
+    - id 管理员ID
+    - email (可选)邮箱
+    - phone (可选)手机号
+  - 权限: admin.write.*
+  - success: null
+- /Delete 删除管理员用户
+  - 参数:
+    - id 管理员ID
+    - true_del 软/硬删除(True 硬, false 软, 默认 false)
+  - 权限: admin.write.all
+  - success: null
