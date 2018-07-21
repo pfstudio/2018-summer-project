@@ -19,7 +19,7 @@ return array(
 	'langPath' => 'language',
 	'viewPath' => 'views',
 	'skinPath' => 'skin',
-    'classes' => 'classes.*',
+    'classes' => array('classes.*', 'vendor.*'),
     'rewriteRule' =>'url',
 	'theme' => array('pc' => array('huawei' => 'default','sysdm' => 'default','sysseller' => 'default'),'mobile' => array('mobile' => 'default','sysdm' => 'default','sysseller' => 'default')),
 	'timezone'	=> 'Etc/GMT-8',
