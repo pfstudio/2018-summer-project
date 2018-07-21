@@ -119,11 +119,27 @@ CREATE TABLE `{pre}class`  (
   `total_num` int(11) NULL DEFAULT NULL COMMENT '容量上限',
   `selected_num` int(11) NULL DEFAULT NULL COMMENT '已选人数',
   `comment` text COMMENT '对教学班的说明 - 仅对内可见',
-  `status` tinyint(1) NULL DEFAULT 0 COMMENT '教学班状态 0: 正常 1: 不可报名',
+  `status` tinyint(1) NOT NULL COMMENT '教学班状态 0: 正常 1: 不可报名',
   PRIMARY KEY (`id`),
   INDEX `course_id` (`course_id`),
   INDEX `name`(`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教学班表';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `{pre}register`
+--
+
+DROP TABLE IF EXISTS `{pre}register`;
+CREATE TABLE `{pre}register`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
+  `student_id` int(11) UNSIGNED NOT NULL COMMENT '学生id',
+  PRIMARY KEY (`id`),
+  INDEX `class_id` (`class_id`),
+  INDEX `student_id` (`student_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '学生报名信息';
 
 -- --------------------------------------------------------
 
