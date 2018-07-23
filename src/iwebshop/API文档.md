@@ -130,6 +130,12 @@ Token计划采用JWT Token的形式。
   - 权限: None
   - success:
     - token JWT Token
+- /ChangePhone 更换手机号
+  - 参数:
+    - phone 新手机号
+    - pin 短信验证码
+  - 权限: user.write.owner
+  - success: null
 - /CreateStudent 后台添加学生
   - 参数:
     - phone 手机号
@@ -142,17 +148,16 @@ Token计划采用JWT Token的形式。
   - 权限: user.write.all;teacher.write.all
   - success:
     - id 教师ID
-- /Delete 删除用户
+- /Delete 后台删除用户
   - 参数:
     - id 用户ID
     - true_del 软/硬删除(true: 硬, false: 软; 默认 false)
   - 权限: user.write.all;student.write.all;teacher.write.all
   - success: null
-- /ChangePhone 更换手机号
+- /Restore 恢复软删除用户
   - 参数:
-    - phone 新手机号
-    - pin 短信验证码
-  - 权限: user.write.*
+    - id 用户ID
+  - 权限: user.write.all;student.write.all;teacher.write.all
   - success: null
 
 ## 短信验证码 SMS
