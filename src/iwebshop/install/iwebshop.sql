@@ -108,7 +108,7 @@ CREATE TABLE `{pre}course`  (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `{pre}teachingClassclass`
+-- 表的结构 `{pre}teaching_class`
 --
 
 DROP TABLE IF EXISTS `{pre}teaching_class`;
@@ -146,16 +146,16 @@ CREATE TABLE `{pre}register`  (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `{pre}teaching_class_student`
+-- 表的结构 `{pre}class_student`
 --
 
-DROP TABLE IF EXISTS `{pre}teaching_class_student`;
-CREATE TABLE `{pre}teaching_class_student`  (
+DROP TABLE IF EXISTS `{pre}class_student`;
+CREATE TABLE `{pre}class_student`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `teaching_class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
+  `class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
   `student_id` int(11) UNSIGNED NOT NULL COMMENT '学生id',
   PRIMARY KEY (`id`),
-  INDEX `teaching_class_id` (`teaching_class_id`),
+  INDEX `class_id` (`class_id`),
   INDEX `student_id` (`student_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教学班与学生关系表';
 
@@ -165,13 +165,13 @@ CREATE TABLE `{pre}teaching_class_student`  (
 -- 表的结构 `{pre}class_teacher`
 --
 
-DROP TABLE IF EXISTS `{pre}teaching_class_teacher`;
-CREATE TABLE `{pre}teaching_class_teacher`  (
+DROP TABLE IF EXISTS `{pre}class_teacher`;
+CREATE TABLE `{pre}class_teacher`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `teaching_class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
+  `class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
   `teacher_id` int(11) UNSIGNED NOT NULL COMMENT '教师id',
   PRIMARY KEY (`id`),
-  INDEX `teaching_class_id` (`teaching_class_id`),
+  INDEX `class_id` (`class_id`),
   INDEX `teacher_id` (`teacher_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教学班和老师的关系表';
 
@@ -217,7 +217,3 @@ CREATE TABLE `{pre}plugin` (
 
 ALTER TABLE `{pre}student` ADD foreign key(user_id) references `{pre}user`(id) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE `{pre}teacher` ADD foreign key(user_id) references `{pre}user`(id) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE `{pre}teaching_class_student` ADD foreign key(student_id) references `{pre}student`(user_id) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE `{pre}teaching_class_student` ADD foreign key(teaching_class_id) references `{pre}teaching_class`(id) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE `{pre}teaching_class_teacher` ADD foreign key(teacher_id) references `{pre}teacher`(user_id) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE `{pre}teaching_class_teacher` ADD foreign key(teaching_class_id) references `{pre}teaching_class`(id) ON UPDATE CASCADE ON DELETE CASCADE;
