@@ -164,7 +164,7 @@ class Student extends IController
         //检测用户是否存在
         if(!$user_id || !$userDB->getObj('id = '.$user_id))
             JsonResult::fail('该用户不存在');
-        $classesHandle = new IQuery('class as c');
+        $classesHandle = new IQuery('teaching_class as c');
         $classesHandle->fields = 'c.id,c.course_id,c.name,c.price,c.introduction';
         $classesHandle->join = 'left join class_student as cs on cs.class_id = c.id';
         $classesHandle->where = 'cs.student_id = '.$user_id;
