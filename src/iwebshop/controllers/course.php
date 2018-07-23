@@ -71,7 +71,7 @@ class Course extends IController
         $introduction = IFilter::act(IReq::get('introduction'));
         $courseDB = new IModel('course');
         //名称合法性检验
-        if (!$name)
+        if(!$name)
             JsonResult::fail('未输入课程名');
         //创建课程并写入数据库
         $course = array(
@@ -103,11 +103,11 @@ class Course extends IController
         //创建课程对象
         $courseDB = new IModel('course');
         //检查课程是否存在
-        if (!$course_id || !$courseDB->getObj('id = '.$course_id))
+        if(!$course_id || !$courseDB->getObj('id = '.$course_id))
             JsonResult::fail('该课程不存在');
         //创建更新对象
         $course = array(
-            'id' => $course_id,
+            'id' => $course_id
             // 'name' => $name,
             // 'price' => $price,
             // 'introduction' => $introduction
@@ -136,7 +136,7 @@ class Course extends IController
         //创建课程对象
         $courseDB = new IModel('course');
         //检查课程是否存在，且未删除
-        if (!$course_id || !$courseDB->getObj('id = '.$course_id.' and status = 0'))
+        if(!$course_id || !$courseDB->getObj('id = '.$course_id.' and status = 0'))
             JsonResult::fail('该课程不存在');
         //删除状态标记变为1
         $courseDB->setData(array(
