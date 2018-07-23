@@ -1,6 +1,8 @@
 <?php
 /**
- * 规范化返回的JSON结果
+ * 返回规范化的JSON结果
+ * 
+ * @author yiluomyt
  */
 class JsonResult
 {

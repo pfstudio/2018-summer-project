@@ -1,4 +1,12 @@
 <?php
+/**
+ * 权限检验插件
+ * 
+ * 根据Token中所提供的Scopes与配置文件中的权限信息相匹配
+ * 拦截未授权的请求，并对只有owner权限的请求设置isOwnered为true
+ * 
+ * @author yiluomyt
+ */
 class _authorization extends pluginBase
 {
     public function reg()
@@ -16,12 +24,12 @@ class _authorization extends pluginBase
         $config = (new Config('auth_config'))->getInfo();
         // 获取控制器ID
         $controllerId = self::controller()->getId();
-        // 获取对应授权信息的key
+        // 获取对应权限信息的key
         $authKey = strtolower($controllerId.'@'.$actionId);
-        // 判定该action是否需要授权
+        // 判定该action是否需要权限
         if(isset($config[$authKey]))
         {
-            // 获取授权信息
+            // 获取权限信息
             $authInfos = $config[$authKey];
             // 获取Token
             $jwt = self::getBearerToken();
@@ -41,9 +49,9 @@ class _authorization extends pluginBase
             {
                 JsonResult::fail('Token格式错误');
             }
-            // 判定是否可以授权
+            // 判定是否可以权限
             if(!self::isAuthorized($authInfos, $scopes))
-                // 不能授权则禁止访问
+                // 不能权限则禁止访问
                 JsonResult::forbid();
         }
     }
