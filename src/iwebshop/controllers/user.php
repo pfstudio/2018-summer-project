@@ -1,6 +1,8 @@
 <?php
 /**
  * 用户相关API
+ * 
+ * @author monitor4
  */
 class User extends IController
 {
