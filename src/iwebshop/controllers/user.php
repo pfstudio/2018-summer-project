@@ -20,17 +20,13 @@ class User extends IController
         $pin = IFilter::act(IReq::get('pin'),'int');
         //验证码模块还未完成
         if(!($phone && true))
-        {
             JsonResult::fail('验证码错误');
-        }
         //创建数据库对象对象
         $userDB = new IModel('user');
         $studentDB = new IModel('student');
         //检查手机号是否重复
         if($userDB->getObj("phone='".$phone."'"))
-        {
             JsonResult::fail('改手机号已被注册');
-        }
         // 创建用户对象
         $user = array(
             'phone' => $phone,
@@ -68,19 +64,13 @@ class User extends IController
         {}
         // 检验用户是否存在，以及是否处在软删除状态
         if(!$user_id || !$userDB->getObj('id = '.$user_id.' and is_del = 0'))
-        {
             JsonResult::fail('该用户不存在');
-        }
         //验证码验证模块
         if(!($phone && true))
-        {
             JsonResult::fail('验证码错误');
-        }
         //检查手机号是否重复
         if($userDB->getObj("phone='".$phone."'"))
-        {
             JsonResult::fail('该手机号已被注册');
-        }
         $user = array(
             'id' => $user_id,
             'phone' => $phone
@@ -103,9 +93,7 @@ class User extends IController
         $userDB = new IModel('user');
         $studentDB = new IModel('student');
         if ($userDB->getObj("phone='".$phone."'"))
-        {
             JsonResult::fail('改手机号已被注册');
-        }
         $user = array(
             'phone' => $phone,
             'role' => 0,
@@ -130,9 +118,7 @@ class User extends IController
         $userDB = new IModel('user');
         $teacherDB = new IModel('teacher');
         if ($userDB->getObj("phone='".$phone."'"))
-        {
             JsonResult::fail('改手机号已被注册');
-        }
         $user = array(
             'phone' => $phone,
             'role' => 0,
@@ -156,9 +142,7 @@ class User extends IController
         $id = IFilter::act(IReq::get('id'),'int');
         $userDB = new IModel('user');
         if(!$id || !$userDB->getObj('id = '.$id.' and is_del = 0'))
-        {
             JsonResult::fail('该用户不存在');
-        }
         $userDB->setData(array(
             'is_del' => 1
         ));
@@ -175,14 +159,10 @@ class User extends IController
         $userDB = new IModel('user');
         //检测用户是否存在
         if(!$id || !$userDB->getObj('id = '.$id))
-        {
             JsonResult::fail('该用户不存在');
-        }
         //检测用户是否已被删除
         if($userDB->getObj('id = '.$id.' and is_del = 0'))
-        {
             JsonResult::fail('该用户未被删除');
-        }
         $userDB->setData(array(
             'is_del' => 0
         ));
