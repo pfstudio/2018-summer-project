@@ -11,7 +11,7 @@ class _authorization extends pluginBase
 {
     public function reg()
     {
-        plugin::reg('onBeforeCreateAction', $this, 'authorizationCheck');
+        //plugin::reg('onBeforeCreateAction', $this, 'authorizationCheck');
     }
 
     /**
