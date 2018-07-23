@@ -80,7 +80,7 @@ class Course extends IController
             'introduction' => $introduction
         );
         $courseDB->setData($course);
-        $courseDB->add();
+        $course_id = $courseDB->add();
         JsonResult::success($courseDB->getObj('id = '.$course_id));
     }
 

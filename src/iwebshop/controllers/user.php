@@ -30,7 +30,7 @@ class User extends IController
         // 创建用户对象
         $user = array(
             'phone' => $phone,
-            'role'  => 0,
+            'job'  => 0,
             'create_time' => date('Y-m-d H:i:s')
         );
         // 添加用户记录
@@ -96,7 +96,7 @@ class User extends IController
             JsonResult::fail('改手机号已被注册');
         $user = array(
             'phone' => $phone,
-            'role' => 0,
+            'job' => 0,
             'create_time' => date('Y-m-d H:i:s')
         );
         $userDB->setData($user);
@@ -121,7 +121,7 @@ class User extends IController
             JsonResult::fail('改手机号已被注册');
         $user = array(
             'phone' => $phone,
-            'role' => 0,
+            'job' => 0,
             'create_time' => date('Y-m-d H:i:s')
         );
         $userDB->setData($user);
