@@ -69,17 +69,17 @@ class User extends IController
         // 检验用户是否存在，以及是否处在软删除状态
         if(!$user_id || !$userDB->getObj('id = '.$user_id.' and is_del = 0'))
         {
-            die(JsonResult::fail('该用户不存在'));
+            JsonResult::fail('该用户不存在');
         }
         //验证码验证模块
         if(!($phone && true))
         {
-            die(JsonResult::fail('验证码错误'));
+            JsonResult::fail('验证码错误');
         }
         //检查手机号是否重复
         if($userDB->getObj("phone='".$phone."'"))
         {
-            die(JsonResult::fail('该手机号已被注册'));
+            JsonResult::fail('该手机号已被注册');
         }
         $user = array(
             'id' => $user_id,
