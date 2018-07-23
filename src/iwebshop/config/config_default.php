@@ -28,7 +28,7 @@ return array(
 	'safe' => 'cookie',
 	'lang' => 'zh_sc',
 	'debug'=> '0',
-	'configExt'=> array('site_config'=>'config/site_config.php'),
+	'configExt'=> array('site_config'=>'config/site_config.php', 'auth_config'=>'config/auth_config.php'),
 	'encryptKey'=>'{ENCRYPTKEY}',
 	'authorizeCode' => '',
 	'uploadSize' => '10',

@@ -41,11 +41,11 @@ class JWTToken
         $token = (new Parser())->parse($jwt);
         if(!$token->verify(new Sha256(), self::getPrivateKey()))
         {
-            die(JsonResult::fail('非法Token'));
+            JsonResult::fail('非法Token');
         }
         if($token->isExpired())
         {
-            die(JsonResult::success('Token已过期'));
+            JsonResult::fail('Token已过期');
         }
     }
 

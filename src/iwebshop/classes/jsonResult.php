@@ -12,7 +12,7 @@ class JsonResult
     {
         // 设置返回内容为json
         header('Content-type:application/json');
-        return JSON::encode(array(
+        echo JSON::encode(array(
             'data'   => $data,
             'status' => 'success',
             'error'  => null
@@ -32,10 +32,24 @@ class JsonResult
         {
             $error = array($error);
         }
-        return JSON::encode(array(
+        die(JSON::encode(array(
             'data'   => null,
             'status' => 'fail',
             'error'  => $error
-        ));
+        )));
+    }
+
+    /**
+     * 未授权访问
+     */
+    public static function forbid()
+    {
+        // 设置返回内容为json
+        header('Content-type:application/json', true, 403);
+        die(JSON::encode(array(
+            'data'   => null,
+            'status' => 'fail',
+            'error'  => '未授权访问'
+        )));
     }
 }

@@ -11,7 +11,7 @@
 class plugin extends IInterceptorBase
 {
 	//默认开启的插件列表
-	private static $defaultList = array();
+	private static $defaultList = array('_authorization');
 
 	//已经注册监听
 	private static $_listen = array();
