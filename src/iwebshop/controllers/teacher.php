@@ -1,12 +1,12 @@
 <?php
 /**
- * 学生
+ * 教师
  */
-class Student extends IController
+class Teacher extends IController
 {
     /**
-     * 获取单条学生信息
-     * @param int id 学生ID
+     * 获取单条教师信息
+     * @param int id 教师ID
      */
     public function Get()
     {
@@ -14,10 +14,10 @@ class Student extends IController
     }
 
     /**
-     * 获取学生列表
+     * 获取教师列表
      * @param int page 页码 默认1
      * @param int pagesize 每页数量 默认20
-     * @param string name 学生姓名(可选)
+     * @param string name 教师姓名(可选)
      */
     public function List()
     {
@@ -25,26 +25,25 @@ class Student extends IController
     }
 
     /**
-     * 更新学生信息
-     * @param int id 学生ID
+     * 更新教师信息
+     * @param int id 教师ID
      * @param string name 姓名
      * @param int sex 性别 0: 男 1: 女
      * @param string email 电子邮箱
      * @param string wechat 微信号
-     * @param string parents_phone 家长手机号
-     * @param string grade 学生年级
-     * @param date birthday 学生生日
+     * @param string photo 教师照片URL
+     * @param string introduction 教师介绍
      * 
-     * @return 更新后的学生信息
+     * @return 更新后的教师信息
      */
     public function Update()
     {
-        echo __FUNCTION__;
+        return __FUNCTION__;
     }
 
     /**
-     * 删除学生
-     * @param int id 学生ID
+     * 删除教师
+     * @param int id 教师ID
      */
     public function Delete()
     {
@@ -52,8 +51,8 @@ class Student extends IController
     }
 
     /**
-     * 恢复已删除学生
-     * @param int id 学生ID
+     * 恢复已删除教师
+     * @param int id 教师ID
      */
     public function Restore()
     {
@@ -61,8 +60,8 @@ class Student extends IController
     }
 
     /**
-     * 获取学生上课的教学班
-     * @param int id 学生ID
+     * 获取教师所教授的教学班
+     * @param int id 教师ID
      * 
      * @return 教学班列表
      */

@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS `{pre}user`;
 CREATE TABLE `{pre}user` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `phone` varchar(50) NOT NULL COMMENT '个人电话-用于登陆和找回密码',
-  `role` tinyint(1) NOT NULL DEFAULT 0 COMMENT '用户身份 0: 学生 1: 教师',
+  `job` tinyint(1) NOT NULL DEFAULT 0 COMMENT '用户身份 0: 学生 1: 教师',
   `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: 未删除 1: 已删除',
   `is_lock` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: 未锁定 1: 已锁定',
   `create_time` datetime(0) DEFAULT NULL COMMENT '加入时间',
@@ -55,6 +55,7 @@ CREATE TABLE `{pre}teacher`  (
   `photo` varchar(255) DEFAULT '' COMMENT '照片',
   `introduction` text COMMENT '介绍',
   PRIMARY KEY (`user_id`),
+  INDEX `name` (`name`),
   INDEX `wechat` (`wechat`),
   INDEX `email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教师信息表';
@@ -68,6 +69,7 @@ CREATE TABLE `{pre}teacher`  (
 DROP TABLE IF EXISTS `{pre}admin`;
 CREATE TABLE `{pre}admin` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
+  `name` varchar(50) NOT NULL COMMENT '姓名',
   `admin_name` varchar(20) NOT NULL COMMENT '用户名',
   `password` varchar(32) NOT NULL COMMENT '密码',
   `phone` varchar(50) default NULL COMMENT '电话',
@@ -106,11 +108,11 @@ CREATE TABLE `{pre}course`  (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `{pre}class`
+-- 表的结构 `{pre}teachingClassclass`
 --
 
-DROP TABLE IF EXISTS `{pre}class`;
-CREATE TABLE `{pre}class`  (
+DROP TABLE IF EXISTS `{pre}teachingClass`;
+CREATE TABLE `{pre}teachingClass`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '教学班ID',
   `course_id` int(11) UNSIGNED NOT NULL COMMENT '课程ID',
   `name` varchar(50) NOT NULL COMMENT '名称',
