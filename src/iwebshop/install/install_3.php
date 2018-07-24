@@ -39,17 +39,17 @@
 									<th>数据库地址</th><td><input class="gray" type="text" name='db_address' value='localhost:3306' /><br /><label>MYSQL数据库的地址，本地默认：localhost:3306</label></td>
 								</tr>
 								<tr>
-									<th>数据库名称</th><td><input class="gray" type="text" name='db_name' /><br /><label class="error" id='db_name_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />请填写正确的数据库名称</label></td>
+									<th>数据库名称</th><td><input class="gray" type="text" name='db_name' value="demo" /><br /><label class="error" id='db_name_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />请填写正确的数据库名称</label></td>
 								</tr>
 								<tr>
-									<th>账户</th><td><input class="gray" type="text" name='db_user' /></td>
+									<th>账户</th><td><input class="gray" type="text" name='db_user' value="root" /></td>
 								</tr>
 								<tr>
 									<th>密码</th><td><input class="gray" type="password" name='db_pwd' /></td>
 								</tr>
 								<tr>
 									<th>数据库表前缀</th>
-									<td><input class="gray" type="text" value='iwebshop_' name='db_pre' /><br /><label class="error" id='db_pre_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />请填写正确的表前缀字符</label></td>
+									<td><input class="gray" type="text" value='pf_' name='db_pre' /><br /><label class="error" id='db_pre_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />请填写正确的表前缀字符</label></td>
 								</tr>
 								<tr>
 									<th></th><td><input class="check" type="button" onclick="check_mysql();" /></td>
@@ -73,14 +73,14 @@
 								<tr>
 									<th>密码</th>
 									<td>
-										<input class="gray" type="password" name='admin_pwd' /><br />
+										<input class="gray" type="password" name='admin_pwd' value="123456" /><br />
 										<label class="error" id='admin_pwd_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />密码格式不正确，字符在6-16个之间</label>
 									</td>
 								</tr>
 								<tr>
 									<th>再次确认</th>
 									<td>
-										<input class="gray" type="password" name='admin_repwd' /><br />
+										<input class="gray" type="password" name='admin_repwd' value="123456" /><br />
 										<label class="error" id='admin_repwd_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />二次密码输入的不一致</label>
 									</td>
 								</tr>
@@ -89,7 +89,7 @@
 							<hr />
 
 							<strong>安装选择</strong>
-							<label><input class="radio" type="radio" name='install_type' checked="checked" value='simple' />导入表结构</label>
+							<label><input class="radio" type="radio" name='install_type' checked="checked" value='simple' />导入表结构和测试数据</label>
 
 							<hr />
 
