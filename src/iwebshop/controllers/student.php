@@ -20,9 +20,13 @@ class Student extends IController
         if(!$id || !$userDB->getObj('id = '.$id.' and is_del = 0'))
             JsonResult::fail('该学生不存在');
         // 查询student表
-        $studentDB = new IQuery('student');
-        $studentDB->where = 'user_id = '.$id;
-        JsonResult::success($studentDB->find());
+        $studentDB = new IQuery('student as s');
+        $studentDB->join = 'left join user as u on u.id = s.user_id';
+        $studentDB->fields = 's.user_id as id,s.name,u.phone,s.parents_phone,'.
+            's.address,s.wechat,s.sex,s.birthday,s.grade,u.create_time,u.last_time';
+        $studentDB->where = 's.user_id = '.$id;
+        $result = $studentDB->find()[0];
+        JsonResult::success($result);
     }
 
     /**
@@ -36,10 +40,16 @@ class Student extends IController
         $page     = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $pagesize = IReq::get('pagesize') ? IFilter::act(IReq::get('pagesize'),'int') : 20;
         $name     = IFilter::act(IReq::get('name'));
-        $studentDB = new IQuery('student');
+        $studentDB = new IQuery('student as s');
+        $studentDB->join = 'left join user as u on u.id = s.user_id';
+        $studentDB->fields = 's.user_id as id,s.name,u.phone,s.parents_phone,'.
+        's.address,s.wechat,s.sex,s.birthday,s.grade,u.create_time,u.last_time';
+        $wheres = array("u.is_del = 0");
         if($name)
-            $studentDB->where = "name like '".$name."%'";
+            array_push($wheres, "s.name like '".$name."%'");
+        $studentDB->where = join(" and ", $wheres);
         $studentDB->page = $page;
+        $studentDB->pagesize = $pagesize;
         $result = $studentDB->find();
         JsonResult::success(array(
             'totalpage' => $studentDB->paging->totalpage,
@@ -167,7 +177,7 @@ class Student extends IController
         $classesHandle = new IQuery('teaching_class as c');
         $classesHandle->fields = 'c.id,c.course_id,c.name,c.price,c.introduction';
         $classesHandle->join = 'left join class_student as cs on cs.class_id = c.id';
-        $classesHandle->where = 'cs.student_id = '.$user_id;
+        $classesHandle->where = 'cs.student_id = '.$user_id.' and c.is_del =0';
         $classes = $classesHandle->find();
         JsonResult::success($classes);
     }

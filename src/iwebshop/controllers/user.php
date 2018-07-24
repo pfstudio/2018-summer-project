@@ -18,8 +18,11 @@ class User extends IController
         //获取手机号和验证码
         $phone = IFilter::act(IReq::get('phone'));
         $pin = IFilter::act(IReq::get('pin'),'int');
+        // 检验手机号格式
+        if(!$phone || !Reg::phone($phone))
+            JsonResult::fail('手机号格式错误');
         //验证码模块还未完成
-        if(!($phone && true))
+        if(!(true))
             JsonResult::fail('验证码错误');
         //创建数据库对象对象
         $userDB = new IModel('user');
@@ -47,35 +50,28 @@ class User extends IController
     
     /**
      * 更换手机号
+     * @param int id 用户ID
      * @param string phone 手机号
      * @param string pin   短信验证码
      */
     public function ChangePhone()
     {
-        //id应通过token获取
         $user_id = IFilter::act(IReq::get('id'),'int');
         $phone = IFilter::act(IReq::get('phone'));
         $pin = IFilter::act(IReq::get('pin'),'int');
         //创建数据库对象
         $userDB = new IModel('user');
         $studentDB = new IModel('student');
-        //此处还需进行用户权限验证
-        if(true)
-        {}
         // 检验用户是否存在，以及是否处在软删除状态
         if(!$user_id || !$userDB->getObj('id = '.$user_id.' and is_del = 0'))
             JsonResult::fail('该用户不存在');
         //验证码验证模块
-        if(!($phone && true))
+        if(!$pin)
             JsonResult::fail('验证码错误');
         //检查手机号是否重复
         if($userDB->getObj("phone='".$phone."'"))
             JsonResult::fail('该手机号已被注册');
-        $user = array(
-            'id' => $user_id,
-            'phone' => $phone
-        );
-        $userDB->setData($user);
+        $userDB->setData(array('phone' => $phone));
         $userDB->update('id = '.$user_id);
     }
     
@@ -121,7 +117,7 @@ class User extends IController
             JsonResult::fail('改手机号已被注册');
         $user = array(
             'phone' => $phone,
-            'job' => 0,
+            'job' => 1,
             'create_time' => date('Y-m-d H:i:s')
         );
         $userDB->setData($user);

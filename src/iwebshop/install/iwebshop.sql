@@ -121,7 +121,8 @@ CREATE TABLE `{pre}teaching_class`  (
   `total_num` int(11) NULL DEFAULT NULL COMMENT '容量上限',
   `selected_num` int(11) NULL DEFAULT NULL COMMENT '已选人数',
   `comment` text COMMENT '对教学班的说明 - 仅对内可见',
-  `status` tinyint(1) NOT NULL COMMENT '教学班状态 0: 正常 1: 不可报名',
+  `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除状态 0: 正常 1: 已被删除',
+  `is_lock` tinyint(1) NOT NULL DEFAULT 0 COMMENT '教学班状态 0: 正常 1: 不可报名',
   PRIMARY KEY (`id`),
   INDEX `course_id` (`course_id`),
   INDEX `name`(`name`)
@@ -233,10 +234,10 @@ INSERT INTO `{pre}course` VALUES (3, '数学建模', 400.00, '这是一门爆肝
 -- ----------------------------
 -- Records of {pre}teaching_class
 -- ----------------------------
-INSERT INTO `{pre}teaching_class` VALUES (1, 1, '', NULL, NULL, 40, 30, '', 0);
-INSERT INTO `{pre}teaching_class` VALUES (2, 1, '', NULL, NULL, 40, 30, '上本课是进阶课程', 0);
-INSERT INTO `{pre}teaching_class` VALUES (3, 2, '该节课名字被修改', 50.50, '该节课简介被修改', NULL, NULL, NULL, 0);
-INSERT INTO `{pre}teaching_class` VALUES (4, 3, '', NULL, '该节课被锁定', NULL, NULL, NULL, 1);
+INSERT INTO `{pre}teaching_class` VALUES (1, 1, '', NULL, NULL, 40, 30, '', 0, 0);
+INSERT INTO `{pre}teaching_class` VALUES (2, 1, '', NULL, NULL, 40, 30, '上本课是进阶课程', 0, 0);
+INSERT INTO `{pre}teaching_class` VALUES (3, 2, '该节课名字被修改', 50.50, '该节课简介被修改', NULL, NULL, NULL, 0, 0);
+INSERT INTO `{pre}teaching_class` VALUES (4, 3, '', NULL, '该节课被删除', NULL, NULL, NULL, 1, 0);
 
 -- ----------------------------
 -- Records of {pre}user
