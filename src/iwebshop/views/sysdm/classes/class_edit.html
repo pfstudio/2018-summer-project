@@ -1,0 +1,95 @@
+{js:kindeditor}
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li>
+      <i class="home-icon fa fa-home"></i>
+      <a href="#">课程</a>
+    </li>
+    <li>
+      <a href="#">教学班管理</a>
+    </li>
+    <li class="active">编辑教学班</li>
+  </ul>
+</div>
+<div class="content">
+  <form action="{url:/classes/class_save}" method="post" name="classForm">
+    <input name="id" value="" type="hidden" />
+    <table class="table form-table">
+      <colgroup>
+        <col width="130px" />
+        <col />
+      </colgroup>
+
+      <tbody>
+        <tr>
+          <th>名称：</th>
+          <td>
+            <input class="form-control" name="name" type="text" value="" pattern="required" placeholder="名称不能为空" />
+          </td>
+        </tr>
+        <tr>
+          <th>开设课程：</th>
+          <td>
+            <select class="form-control" name="course_id">
+              {foreach:items=Api::run('getCourseList')}
+              <option value="{$item['id']}" {if:$item['id']==$class['course_id']}selected{/if}>{$item['id']}-{$item['name']}</option>
+              {/foreach}
+            </select>
+            <p class="help-block">
+              <a href='{url:/courses/course_edit}'>请点击添加课程</a>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>价格：</th>
+          <td>
+            <input type="text" class="form-control" name="price" />
+          </td>
+        </tr>
+        <tr>
+            <th>容量上限：</th>
+            <td>
+              <input type="text" class="form-control" name="total_num" />
+            </td>
+          </tr>
+        <tr>
+          <th>状态：</th>
+          <td>
+            <label class="radio-inline">
+              <input type="radio" name="is_lock" value="0" checked>正常
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="is_lock" value="1">锁定
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <th>介绍：</th>
+          <td>
+            <textarea class="form-control" id="introduction" name="introduction" type="text" style="width:100%;height:400px;"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <th>备注：</th>
+          <td>
+            <textarea class="form-control" name="comment" type="text" style="width:100%;height:200px;"></textarea>
+          </td>
+        </tr>
+
+        <tr>
+          <td></td>
+          <td>
+            <button class='btn btn-primary' type="submit">确 定</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+<script>
+  // 设置默认数据
+  var formObj = new Form('classForm');
+  formObj.init({echo:JSON::encode($class)});
+  //编辑器载入
+	KindEditorObj = KindEditor.create('#introduction',{"filterMode":false});
+</script>

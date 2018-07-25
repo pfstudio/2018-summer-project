@@ -33,7 +33,7 @@
                 <!--顶部菜单 开始-->
                 <div id="menu" class="navbar-custom-menu">
                     <ul class="nav navbar-nav" name="topMenu">
-                        {set:$menuData=menu::init($this->admin['role_id']);}
+                        {set:$menuData=menu::init();}
                         {foreach:items=menu::getTopMenu($menuData)}
                         <li><a hidefocus="true" href="{url:$item}">{$key}</a></li>
                         {/foreach}
@@ -54,8 +54,8 @@
                         <i class="fa fa-user"></i>
                     </div>
                     <div class="pull-left info">
-                        <p>{$this->admin['admin_name']}</p>
-                        <a href="#">{$this->admin['admin_role_name']}</a>
+                        <p>管理员姓名</p>
+                        <a href="#">管理员权限</a>
                     </div>
                 </div>
 
@@ -96,7 +96,6 @@
 	            <li><a href="{url:/system/admin_repwd}"><i class="fa fa-circle-o text-yellow"></i> <span>修改密码</span></a></li>
 	            <li><a href="{url:/system/default}"><i class="fa fa-circle-o text-green"></i> <span>后台首页</span></a></li>
 	            <li><a href="{url:}" target='_blank'><i class="fa fa-circle-o text-aqua"></i> <span>商城首页</span></a></li>
-	            <li><a href="{url:/system/navigation}"><i class="fa fa-circle-o"></i> <span>快速导航</span></a></li>
 	        </ul>
 	    </aside>
 	    <!--顶部弹出菜单 结束-->
@@ -104,19 +103,11 @@
 </body>
 <script type='text/javascript'>
 //图标配置
-var icoConfig = {"商品管理":"fa-inbox","商品分类":"fa-list","品牌":"fa-registered","模型":"fa-cubes","搜索":"fa-search","会员管理":"fa-user-o","商户管理":"fa-group","信息处理":"fa-comment-o","订单管理":"fa-file-text","单据管理":"fa-files-o","发货地址":"fa-address-card-o","促销活动":"fa-bullhorn","营销活动":"fa-bell-o","代金券管理":"fa-ticket","基础数据统计":"fa-bar-chart-o","后台首页":"fa-home","日志操作记录":"fa-file-code-o","商户数据统计":"fa-pie-chart","支付管理":"fa-credit-card","第三方平台":"fa-share-alt","配送管理":"fa-truck","地域管理":"fa-street-view","权限管理":"fa-unlock-alt","数据库管理":"fa-database","文章管理":"fa-file-o","帮助管理":"fa-question-circle-o","广告管理":"fa-flag","公告管理":"fa-bookmark-o","网站地图":"fa-sitemap","插件管理":"fa-cogs","网站管理":"fa-wrench"};
 $('i[name="ico"]').each(function()
 {
 	var menuName = $(this).attr('menu');
-	if(menuName && icoConfig[menuName])
-	{
-		$(this).addClass(icoConfig[menuName]);
-	}
-	else
-	{
-		//默认图标
-		$(this).addClass("fa-circle");
-	}
+    //默认图标
+    $(this).addClass("fa-circle");
 });
 
 //兼容IE系列

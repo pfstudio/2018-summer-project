@@ -19,7 +19,7 @@ class Course extends IController
         //创建课程对象
         $courseDB = new IModel('course');
         //检验课程是否存在
-        if(!$course_id || !$courseDB->getObj('id = '.$course_id))
+        if(!$course_id || !$courseDB->getObj('id = '.$course_id.' and is_del = 0'))
             JsonResult::fail('该课程不存在');
         //返回课程信息
         JsonResult::success($courseDB->getObj('id = '.$course_id));
@@ -43,7 +43,7 @@ class Course extends IController
         $courseDB = new IQuery('course');
         //模糊匹配
         if($name)
-            $courseDB->where = "name like '".$name."%'";
+            $courseDB->where = "name like '".$name."%'".' and is_del = 0';
         //返回列表
         $courseDB->page = $page;
         $result = $courseDB->find();
@@ -136,11 +136,11 @@ class Course extends IController
         //创建课程对象
         $courseDB = new IModel('course');
         //检查课程是否存在，且未删除
-        if(!$course_id || !$courseDB->getObj('id = '.$course_id.' and status = 0'))
+        if(!$course_id || !$courseDB->getObj('id = '.$course_id.' and is_del = 0'))
             JsonResult::fail('该课程不存在');
         //删除状态标记变为1
         $courseDB->setData(array(
-            'status' => 1
+            'is_del' => 1
         ));
         $courseDB->update('id = '.$course_id);
     }
@@ -161,11 +161,11 @@ class Course extends IController
         if(!$course_id || !$courseDB->getObj('id = '.$course_id))
             JsonResult::fail('该课程不存在');
         //检查课程是否未被删除
-        if($courseDB->getObj('id = '.$course_id.' and status = 0'))
+        if($courseDB->getObj('id = '.$course_id.' and is_del = 0'))
             JsonResult::fail('该课程未被删除');
         //课程删除状态修改为0
         $courseDB->setData(array(
-            'status' => 0
+            'is_del' => 0
         ));
         $courseDB->update('id = '.$course_id);
         JsonResult::success($courseDB->getObj('id = '.$course_id));

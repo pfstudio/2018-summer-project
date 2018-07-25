@@ -11,10 +11,45 @@ class Menu
 {
     //菜单的配制数据
 	public static $menu = array(
-		'学生' => array(
-			'学生管理' => array(
-				'/student/list' => '学生列表'
+		'课程'=>array(
+			'课程管理'=>array(
+				'/courses/course_list' => '课程列表',
+				'/courses/course_edit' => '课程添加'
+			),
+			'教学班管理' => array(
+				'/classes/class_list'  => '教学班列表',
+				'/classes/class_edit'  => '教学班添加'
 			)
+		),
+
+		'用户'=>array(
+			'学生管理'=>array(
+	    		'/students/student_list' 	=> '学生列表',
+	     		'/students/student_edit' 	=> '添加学生'
+			),
+			'教师管理' => array(
+				'/teachers/teacher_list' => '教师列表',
+				'/teachers/teacher_edit' => '添加教师'
+			),
+		),
+
+        '系统'=>array(
+    		'后台首页'=>array(
+    			'/system/default' => '首页',
+    		),
+        	'网站管理'=>array(
+        		'/system/conf_base' => '网站设置',
+        		'/system/conf_guide' => '网站导航',
+        		'/system/conf_banner' => '首页幻灯图',
+        		'/system/conf_ui/type/site'   => '网站前台主题',
+        		'/system/conf_ui/type/system'   => '后台管理主题',
+        		'/system/conf_ui/type/seller'   => '商家管理主题',
+            ),
+        	'权限管理'=>array(
+        		'/system/admin_list' => '管理员',
+        		'/system/role_list'  => '角色',
+        		'/system/right_list' => '权限资源'
+        	),
 		)
 	);
 
@@ -26,52 +61,14 @@ class Menu
 
     /**
      * @brief 根据权限初始化菜单
-     * @param int $roleId 角色ID
      * @return array 菜单数组
      */
-    public static function init($roleId)
+    public static function init()
     {
 		//菜单创建事件触发
-		plugin::trigger("onSystemMenuCreate");
-
-		//根据角色分配权限
-		if($roleId == 0)
-		{
-			$adminRights = 'administrator';
-		}
-		else
-		{
-			$roleObj = new IModel('admin_role');
-			$where   = 'id = '.$roleId.' and is_del = 0';
-			$roleRow = $roleObj->getObj($where);
-			$adminRights = isset($roleRow['rights']) ? $roleRow['rights'] : '';
-		}
-
-		//1,超管返回全部菜单
-		if($adminRights == "administrator")
-		{
-			return self::$menu;
-		}
-
-		//2,根据权限码显示菜单
-		$result      = array();
-		$defaultShow = array('/system/default');
-		foreach(self::$menu as $key1 => $val1)
-		{
-			foreach($val1 as $key2 => $val2)
-			{
-				foreach($val2 as $key3 => $val3)
-				{
-					//把菜单数据里面的路径转化成@符号做权限码比对
-					$tempKey3 = str_replace("/","@",trim($key3,"/"));
-					if(in_array($key3,$defaultShow) || strpos($adminRights,$tempKey3) !== false)
-					{
-						$result[$key1][$key2][$key3] = $val3;
-					}
-				}
-			}
-		}
-		return $result;
+        plugin::trigger("onSystemMenuCreate");
+        
+		return self::$menu;
     }
 
     /**

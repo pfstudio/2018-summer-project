@@ -1,0 +1,85 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li>
+      <i class="home-icon fa fa-home"></i>
+      <a href="#">课程</a>
+    </li>
+    <li>
+      <a href="#">教学班管理</a>
+    </li>
+    <li class="active">教学班列表</li>
+  </ul>
+</div>
+
+<div class="content">
+  <table class="table list-table">
+    <colgroup>
+      <col width="35px" />
+      <col width="100px" />
+      <col width="100px" />
+      <col width="100px" />
+      <col width="100px" />
+      <col width="100px" />
+      <col width="100px" />
+      <col />
+      <col width="200px" />
+    </colgroup>
+    <caption>
+      <a class="btn btn-default" href='{url:/classes/class_edit}'>
+        <i class="fa fa-plus"></i>添加教学班
+      </a>
+      <a class="btn btn-default" onclick="selectAll('check[]')">
+        <i class="fa fa-check"></i>全选
+      </a>
+      <a class="btn btn-default" onclick="delModel({'form':'class_list',msg:'确定要删除所选中的课程吗？<br />删除的课程可以从回收站找回。'})">
+        <i class="fa fa-close"></i>批量删除
+      </a>
+      <a class="btn btn-default" href='{url:/classes/recycling}'>
+        <i class="fa fa-trash"></i>回收站
+      </a>
+    </caption>
+    <thead>
+      <tr>
+        <th></th>
+        <th>名称</th>
+        <th>课程</th>
+        <th>价格</th>
+        <th>已选人数</th>
+        <th>容量上限</th>
+        <th>状态</th>
+        <th>简介</th>
+        <th>备注</th>
+      </tr>
+    </thead>
+    <!-- 用于全部删除 -->
+    <form action="{url:/classes/class_reclaim}" method="post" name="class_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+      <tbody>
+        {foreach:items=$this->query->find()}
+        <tr>
+          <td><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+          <td title="{echo:htmlspecialchars($item['name'])}">{$item['name']}</td>
+          <td title="{echo:htmlspecialchars($item['course_name'])}">
+            <a href="{url:/courses/course_edit/id/$item['course_id']}">{$item['course_name']}</a>
+          </td>
+          <td title="{$item['price']}">￥{$item['price']}</td>
+          <td title="{$item['selected_num']}">{$item['selected_num']}</td>
+          <td title="{$item['total_num']}">{$item['total_num']}</td>
+          <td>{if:$item['is_lock']=='0'}正常{else:}锁定{/if}</td>
+          <td title="{echo:htmlspecialchars($item['introduction'])}">{$item['introduction']}</td>
+          <td title="{echo:htmlspecialchars($item['comment'])}">{$item['comment']}</td>
+          <td>
+            {if:$item['is_lock']=='0'}
+            <a href="{url:/classes/class_lock/id/$item['id']}"><i class='operator fa fa-lock'></i></a>
+            {else:}
+            <a href="{url:/classes/class_unlock/id/$item['id']}"><i class='operator fa fa-unlock'></i></a>
+            {/if}
+            <a href="{url:/classes/class_edit/id/$item['id']}"><i class='operator fa fa-edit'></i></a>
+            <a onclick="delModel({link:'{url:/classes/class_reclaim/check/$item['id']}'})"><i class='operator fa fa-close'></i></a>
+          </td>
+        </tr>
+        {/foreach}
+      </tbody>
+    </form>
+  </table>
+</div>
+{$this->query->getPageBar()}

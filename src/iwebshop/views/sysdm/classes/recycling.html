@@ -1,0 +1,96 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li>
+      <i class="home-icon fa fa-home"></i>
+      <a href="#">课程</a>
+    </li>
+    <li>
+      <a href="#">教学班管理</a>
+    </li>
+    <li class="active">教学班回收站</li>
+  </ul>
+</div>
+
+<form action="" method="post" name="class_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+  <div class="content">
+    <table class="table">
+        <colgroup>
+          <col width="35px" />
+          <col width="100px" />
+          <col width="100px" />
+          <col width="100px" />
+          <col width="100px" />
+          <col width="100px" />
+          <col width="100px" />
+          <col />
+          <col width="200px" />
+        </colgroup>
+      <caption>
+        <a class="btn btn-default" href='{url:/classes/class_list}'>
+          <i class="fa fa-reply"></i>返回列表
+        </a>
+        <a class="btn btn-default" onclick="selectAll('check[]')">
+          <i class="fa fa-check"></i>全选
+        </a>
+        <a class="btn btn-default" onclick="course_restore()">
+          <i class="fa fa-recycle"></i>还原
+        </a>
+        <a class="btn btn-default" onclick="course_del()">
+          <i class="fa fa-close"></i>永久删除
+        </a>
+      </caption>
+      <thead>
+        <tr>
+            <th></th>
+            <th>名称</th>
+            <th>课程</th>
+            <th>价格</th>
+            <th>已选人数</th>
+            <th>容量上限</th>
+            <th>状态</th>
+            <th>简介</th>
+            <th>备注</th>
+          </tr>
+      </thead>
+
+      <tbody>
+        {foreach:items=$this->query->find()}
+        <tr>
+          <td><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+          <td title="{echo:htmlspecialchars($item['name'])}">{$item['name']}</td>
+          <td title="{echo:htmlspecialchars($item['course_name'])}">
+            <a href="{url:/courses/course_edit/id/$item['course_id']}">{$item['course_name']}</a>
+          </td>
+          <td title="{$item['price']}">￥{$item['price']}</td>
+          <td title="{$item['selected_num']}">{$item['selected_num']}</td>
+          <td title="{$item['total_num']}">{$item['total_num']}</td>
+          <td>{if:$item['is_lock']=='0'}正常{else:}锁定{/if}</td>
+          <td title="{echo:htmlspecialchars($item['introduction'])}">{$item['introduction']}</td>
+          <td title="{echo:htmlspecialchars($item['comment'])}">{$item['comment']}</td>
+          <td>
+            <a href="{url:/classes/class_restore/check/$item['id']}">
+              <i class='operator fa fa-reply'></i>
+            </a>
+            <a href="{url:/classes/class_del/check/$item['id']}">
+              <i class='operator fa fa-close'></i>
+            </a>
+          </td>
+        </tr>
+        {/foreach}
+      </tbody>
+    </table>
+  </div>
+  {$this->query->getPageBar()}
+</form>
+
+<script language="javascript">
+  function course_del() {
+    $("form[name='class_list']").attr('action', '{url:/classes/class_del}');
+    confirm('确定要删除所选中的教学班吗？<br />删除的教学班不可以找回。', 'formSubmit(\'class_list\')');
+  }
+
+  function course_restore() {
+    $("form[name='class_list']").attr('action', '{url:/classes/class_restore}');
+    confirm('确定要还原所选中的教学班吗？', 'formSubmit(\'class_list\')');
+  }
+</script>

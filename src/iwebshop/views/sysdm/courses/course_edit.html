@@ -1,0 +1,69 @@
+{js:kindeditor}
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li>
+      <i class="home-icon fa fa-home"></i>
+      <a href="#">课程</a>
+    </li>
+    <li>
+      <a href="#">课程管理</a>
+    </li>
+    <li class="active">编辑课程</li>
+  </ul>
+</div>
+<div class="content">
+  <form action="{url:/courses/course_save}" method="post" name="courseForm">
+    <input name="id" value="" type="hidden" />
+    <table class="table form-table">
+      <colgroup>
+        <col width="130px" />
+        <col />
+      </colgroup>
+
+      <tbody>
+        <tr>
+          <th>课程名称：</th>
+          <td>
+            <input class="form-control" name="name" type="text" value="" pattern="required" placeholder="课程名不能为空" />
+          </td>
+        </tr>
+        <tr>
+          <th>课程基础价格：</th>
+          <td>
+            <input type="text" class="form-control" name="price" />
+          </td>
+        </tr>
+        <tr>
+          <th>课程状态：</th>
+          <td>
+            <label class="radio-inline">
+              <input type="radio" name="is_lock" value="0" checked>正常
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="is_lock" value="1">锁定
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <th>课程介绍：</th>
+          <td>
+            <textarea class="form-control" id="introduction" name="introduction" type="text" style="width:100%;height:400px;"></textarea>
+          </td>
+        </tr>
+
+        <tr>
+          <td></td>
+          <td>
+            <button class='btn btn-primary' type="submit">确 定</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+<script>
+  // 设置默认数据
+  var formObj = new Form('courseForm');
+  formObj.init({echo: JSON::encode($course)});
+  KindEditorObj = KindEditor.create('#introduction', {"filterMode": false});
+</script>

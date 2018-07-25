@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>{$httpcode}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+	<div class="container">
+		<div class="page-header">
+			<div class="alert alert-danger">
+			    <h1>
+			    	{$httpcode}
+			        <small>{$data}</small>
+			    </h1>
+			</div>
+		</div>
+
+		<div class="alert alert-success">
+			<p>请检查刚才的输入</p>
+		</div>
+	</div>
+</body>
+</html>

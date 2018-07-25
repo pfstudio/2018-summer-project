@@ -36,7 +36,7 @@ CREATE TABLE `{pre}student`  (
   `birthday` date DEFAULT NULL COMMENT '生日',
   `grade` varchar(50) DEFAULT NULL COMMENT '年级',
   PRIMARY KEY (`user_id`),
-  INDEX `wechat` (`wechat`)
+  INDEX `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '学生信息表';
 
 -- --------------------------------------------------------
@@ -99,10 +99,12 @@ CREATE TABLE `{pre}course`  (
   `name` varchar(50) NOT NULL COMMENT '课程名称',
   `price` decimal(15, 2) NULL DEFAULT NULL COMMENT '课程的基础价格',
   `introduction` text COMMENT '课程介绍',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '课程状态 0 正常 1 已删除 2 不可开班',
+  `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '课程状态 0 正常 1 已删除',
+  `is_lock` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 正常 1 不可开班',
   PRIMARY KEY (`id`),
   INDEX `name`(`name`),
-  INDEX `status`(`status`)
+  INDEX `is_del` (`is_del`),
+  INDEX `is_lock` (`is_lock`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '课程信息表';
 
 -- --------------------------------------------------------
@@ -125,7 +127,9 @@ CREATE TABLE `{pre}teaching_class`  (
   `is_lock` tinyint(1) NOT NULL DEFAULT 0 COMMENT '教学班状态 0: 正常 1: 不可报名',
   PRIMARY KEY (`id`),
   INDEX `course_id` (`course_id`),
-  INDEX `name`(`name`)
+  INDEX `name`(`name`),
+  INDEX `is_del` (`is_del`),
+  INDEX `is_lock` (`is_lock`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教学班表';
 
 -- --------------------------------------------------------
@@ -140,7 +144,9 @@ CREATE TABLE `{pre}register`  (
   `class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
   `student_id` int(11) UNSIGNED NOT NULL COMMENT '学生id',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `class_id_and_student_id` (`class_id`, `student_id`)
+  UNIQUE INDEX `class_id_and_student_id` (`class_id`, `student_id`),
+  INDEX `class_id` (`class_id`),
+  INDEX `student_id` (`student_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '学生报名信息';
 
 -- --------------------------------------------------------
@@ -193,6 +199,22 @@ CREATE TABLE `{pre}log_sql` (
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `{pre}log_operation`
+--
+
+DROP TABLE IF EXISTS `{pre}log_operation`;
+CREATE TABLE `{pre}log_operation` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `author` varchar(80) NOT NULL COMMENT '操作人员',
+  `action` varchar(200) NOT NULL COMMENT '动作',
+  `content` text COMMENT '内容',
+  `datetime` datetime NOT NULL COMMENT '时间',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='日志操作记录';
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `{pre}plugin`
 --
 
@@ -227,9 +249,9 @@ ALTER TABLE `{pre}teacher` ADD foreign key(user_id) references `{pre}user`(id) O
 -- ----------------------------
 -- Records of {pre}course
 -- ----------------------------
-INSERT INTO `{pre}course` VALUES (1, '高等代数', 500.00, '这是一门挂了很多人的科目', 0);
-INSERT INTO `{pre}course` VALUES (2, '离散数学', 100.00, '这是一门没什么卵用的科目', 0);
-INSERT INTO `{pre}course` VALUES (3, '数学建模', 400.00, '这是一门爆肝的科目', 0);
+INSERT INTO `{pre}course` VALUES (1, '高等代数', 500.00, '这是一门挂了很多人的科目', 0, 0);
+INSERT INTO `{pre}course` VALUES (2, '离散数学', 100.00, '这是一门没什么卵用的科目', 0, 0);
+INSERT INTO `{pre}course` VALUES (3, '数学建模', 400.00, '这是一门爆肝的科目', 0, 0);
 
 -- ----------------------------
 -- Records of {pre}teaching_class

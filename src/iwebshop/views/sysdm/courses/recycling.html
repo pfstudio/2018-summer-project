@@ -1,0 +1,78 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li>
+      <i class="home-icon fa fa-home"></i>
+      <a href="#">课程</a>
+    </li>
+    <li>
+      <a href="#">课程管理</a>
+    </li>
+    <li class="active">课程回收站</li>
+  </ul>
+</div>
+
+<form action="" method="post" name="course_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+  <div class="content">
+    <table class="table">
+        <colgroup>
+          <col width="35px" />
+          <col width="200px" />
+          <col width="200px" />
+          <col width="200px" />
+          <col />
+        </colgroup>
+      <caption>
+        <a class="btn btn-default" href='{url:/courses/course_list}'>
+          <i class="fa fa-reply"></i>返回列表
+        </a>
+        <a class="btn btn-default" onclick="selectAll('check[]')">
+          <i class="fa fa-check"></i>全选
+        </a>
+        <a class="btn btn-default" onclick="course_restore()">
+          <i class="fa fa-recycle"></i>还原
+        </a>
+        <a class="btn btn-default" onclick="course_del()">
+          <i class="fa fa-close"></i>永久删除
+        </a>
+      </caption>
+      <thead>
+          <tr>
+            <th></th>
+            <th>课程名称</th>
+            <th>课程基础价格</th>
+            <th>课程状态</th>
+            <th>课程简介</th>
+          </tr>
+      </thead>
+
+      <tbody>
+          {foreach:items=$this->query->find()}
+          <tr>
+            <td><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+            <td title="{echo:htmlspecialchars($item['name'])}">{$item['name']}</td>
+            <td title="{$item['price']}">{$item['price']}</td>
+            <td>{if:$item['is_lock']=='0'}正常{else:}锁定{/if}</td>
+            <td title="{echo:htmlspecialchars($item['introduction'])}">{$item['introduction']}</td>
+            <td>
+              <a href="{url:/courses/course_restore/check/$item['id']}"><i class='operator fa fa-reply'></i></a>
+              <a href="{url:/courses/course_del/check/$item['id']}"><i class='operator fa fa-close'></i></a>
+            </td>
+          </tr>
+          {/foreach}
+      </tbody>
+    </table>
+  </div>
+  {$this->query->getPageBar()}
+</form>
+
+<script language="javascript">
+  function course_del() {
+    $("form[name='course_list']").attr('action', '{url:/courses/course_del}');
+    confirm('确定要删除所选中的课程吗？<br />删除的课程不可以找回。', 'formSubmit(\'course_list\')');
+  }
+
+  function course_restore() {
+    $("form[name='course_list']").attr('action', '{url:/courses/course_restore}');
+    confirm('确定要还原所选中的课程吗？', 'formSubmit(\'course_list\')');
+  }
+</script>
