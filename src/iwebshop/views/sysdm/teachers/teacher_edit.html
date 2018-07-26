@@ -1,0 +1,102 @@
+{js:kindeditor}
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li>
+      <i class="home-icon fa fa-home"></i>
+      <a href="#">用户</a>
+    </li>
+    <li>
+      <a href="#">教师管理</a>
+    </li>
+    <li class="active">编辑教师</li>
+  </ul>
+</div>
+<div class="content">
+  <form action="{url:/teachers/teacher_save}" method="post" name="teacherForm" enctype="multipart/form-data">
+    <input name="id" value="" type="hidden" />
+    <table class="table form-table">
+      <colgroup>
+        <col width="130px" />
+        <col />
+      </colgroup>
+
+      <tbody>
+        <tr>
+          <th>姓名：</th>
+          <td>
+            <input class="form-control" name="name" type="text" value="" pattern="required" placeholder="教师姓名" />
+          </td>
+        </tr>
+        <tr>
+          <th>照片：</th>
+          <td>
+            <input type='file' name='photo' />
+            {if:isset($teacher['photo']) && $teacher['photo']}
+            <p><img src="{url:$teacher['photo']}" style="width:220px;border:1px solid #ccc" /></p>
+            {/if}
+          </td>
+        </tr>
+        <tr>
+          <th>状态：</th>
+          <td>
+            <label class="radio-inline">
+              <input type="radio" name="is_lock" value="0" checked>正常
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="is_lock" value="1">锁定
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <th>性别：</th>
+          <td>
+            <label class="radio-inline">
+              <input type="radio" name="sex" value="0" checked>男
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="sex" value="1">女
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <th>电话：</th>
+          <td>
+            <input class="form-control" name="phone" type="text" value="" empty pattern="mobi" placeholder="手机号码" />
+          </td>
+        </tr>
+        <tr>
+          <th>邮箱：</th>
+          <td>
+            <input class="form-control" name="email" type="text" value="" empty pattern="email" placeholder="常用邮箱" />
+          </td>
+        </tr>
+        <tr>
+          <th>微信：</th>
+          <td>
+            <input class="form-control" type="text" name="wechat" value="" placeholder="微信号/手机号">
+          </td>
+        </tr>
+        <tr>
+          <th>简介：</th>
+          <td>
+            <textarea class="form-control" id="introduction" name="introduction" type="text" style="width:100%;height:400px;"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <button class='btn btn-primary' type="submit">确 定</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+<script>
+  // 设置默认数据
+  var formObj = new Form('teacherForm');
+  formObj.init({echo:JSON::encode($teacher)});
+  KindEditorObj = KindEditor.create('#introduction', {
+    "filterMode": false
+  });
+</script>

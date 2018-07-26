@@ -64,6 +64,8 @@
 <script>
   // 设置默认数据
   var formObj = new Form('courseForm');
-  formObj.init({echo: JSON::encode($course)});
-  KindEditorObj = KindEditor.create('#introduction', {"filterMode": false});
+  formObj.init({echo:JSON::encode($course)});
+  KindEditorObj = KindEditor.create('#introduction', {
+    "filterMode": false
+  });
 </script>

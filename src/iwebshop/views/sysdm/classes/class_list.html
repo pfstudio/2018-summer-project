@@ -23,6 +23,7 @@
       <col width="100px" />
       <col />
       <col width="200px" />
+      <col width="200px" />
     </colgroup>
     <caption>
       <a class="btn btn-default" href='{url:/classes/class_edit}'>
@@ -47,8 +48,9 @@
         <th>已选人数</th>
         <th>容量上限</th>
         <th>状态</th>
-        <th>简介</th>
         <th>备注</th>
+        <th></th>
+        <th></th>
       </tr>
     </thead>
     <!-- 用于全部删除 -->
@@ -56,7 +58,9 @@
       <tbody>
         {foreach:items=$this->query->find()}
         <tr>
-          <td><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+          <td>
+            <input name="check[]" type="checkbox" value="{$item['id']}" />
+          </td>
           <td title="{echo:htmlspecialchars($item['name'])}">{$item['name']}</td>
           <td title="{echo:htmlspecialchars($item['course_name'])}">
             <a href="{url:/courses/course_edit/id/$item['course_id']}">{$item['course_name']}</a>
@@ -65,16 +69,30 @@
           <td title="{$item['selected_num']}">{$item['selected_num']}</td>
           <td title="{$item['total_num']}">{$item['total_num']}</td>
           <td>{if:$item['is_lock']=='0'}正常{else:}锁定{/if}</td>
-          <td title="{echo:htmlspecialchars($item['introduction'])}">{$item['introduction']}</td>
           <td title="{echo:htmlspecialchars($item['comment'])}">{$item['comment']}</td>
           <td>
+            <a class="btn btn-default" href="{url:/classes/class_students/id/$item['id']}">班级学生</a>
+            <a class="btn btn-default" href="{url:/classes/class_teachers/id/$item['id']}">班级教师</a>
+          </td>
+          <td>
+            <a href="#" onclick="showIntroduction({$item['id']})" title="查看简介">
+              <i class='operator fa fa-eye'></i>
+            </a>
             {if:$item['is_lock']=='0'}
-            <a href="{url:/classes/class_lock/id/$item['id']}"><i class='operator fa fa-lock'></i></a>
+            <a href="{url:/classes/class_lock/id/$item['id']}" title="锁定">
+              <i class='operator fa fa-lock'></i>
+            </a>
             {else:}
-            <a href="{url:/classes/class_unlock/id/$item['id']}"><i class='operator fa fa-unlock'></i></a>
+            <a href="{url:/classes/class_unlock/id/$item['id']}" title="解锁">
+              <i class='operator fa fa-unlock'></i>
+            </a>
             {/if}
-            <a href="{url:/classes/class_edit/id/$item['id']}"><i class='operator fa fa-edit'></i></a>
-            <a onclick="delModel({link:'{url:/classes/class_reclaim/check/$item['id']}'})"><i class='operator fa fa-close'></i></a>
+            <a href="{url:/classes/class_edit/id/$item['id']}" title="编辑">
+              <i class='operator fa fa-edit'></i>
+            </a>
+            <a onclick="delModel({link:'{url:/classes/class_reclaim/check/$item['id']}'})" title="删除">
+              <i class='operator fa fa-close'></i>
+            </a>
           </td>
         </tr>
         {/foreach}
@@ -83,3 +101,13 @@
   </table>
 </div>
 {$this->query->getPageBar()}
+<script>
+  function showIntroduction(id) {
+    art.dialog.open('{url:/classes/introduction}&id=' + id, {
+      'id': 'introduction',
+      'title': '教学班介绍',
+      'width': '790px',
+      'height': '590px'
+    });
+  }
+</script>

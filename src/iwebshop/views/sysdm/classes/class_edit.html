@@ -30,9 +30,10 @@
         <tr>
           <th>开设课程：</th>
           <td>
-            <select class="form-control" name="course_id">
+            <select class="form-control" id="course_id" name="course_id">
+              {if:!isset($class['course_id'])}<option value="" style="display: none;" selected></option>{/if}
               {foreach:items=Api::run('getCourseList')}
-              <option value="{$item['id']}" {if:$item['id']==$class['course_id']}selected{/if}>{$item['id']}-{$item['name']}</option>
+              <option value="{$item['id']}" {if:isset($class['course_id']) && $item['id']==$class['course_id']}selected{/if}>{$item['name']}</option>
               {/foreach}
             </select>
             <p class="help-block">
@@ -92,4 +93,13 @@
   formObj.init({echo:JSON::encode($class)});
   //编辑器载入
 	KindEditorObj = KindEditor.create('#introduction',{"filterMode":false});
+  $('#course_id').change(function(e)
+  {
+    let course_id = this.options[this.options.selectedIndex].value;
+    $.getJSON('{url:/course/get/}', {id: course_id}, function(json){
+      delete json.data.id;
+      formObj.init(json.data);
+      KindEditorObj.html(json.data.introduction);
+    });
+  })
 </script>

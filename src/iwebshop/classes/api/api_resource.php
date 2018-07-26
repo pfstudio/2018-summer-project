@@ -8,6 +8,7 @@ return array(
             'type'   => 'row'
         )
     ),
+    // 获取课程列表
     'getCourseList' => array(
         'query' => array(
             'name' => 'course',
@@ -25,5 +26,25 @@ return array(
             'where' => 'tc.id = #id# and tc.is_del = 0',
             'type' => 'row'
         )
-    )   
+    ),
+    // 获取学生信息
+    'getStudentInfo' => array(
+        'query' => array(
+            'name'   => 'student as s',
+            'join'   => 'left join user as u on u.id = s.user_id',
+            'fields' => 'u.id,s.*,u.phone,u.is_lock,u.is_del',
+            'where'  => 's.user_id = #id# and u.is_del = 0',
+            'type'   => 'row'
+        )
+    ),
+    // 获取教师信息
+    'getTeacherInfo' => array(
+        'query' => array(
+            'name'   => 'teacher as t',
+            'join'   => 'left join user as u on u.id = t.user_id',
+            'fields' => 'u.id,t.*,u.phone,u.is_lock,u.is_del',
+            'where'  => 't.user_id = #id# and u.is_del = 0',
+            'type'   => 'row'
+        )
+    ),
 );

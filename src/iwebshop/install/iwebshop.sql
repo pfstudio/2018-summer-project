@@ -121,7 +121,7 @@ CREATE TABLE `{pre}teaching_class`  (
   `price` decimal(15, 2) NULL DEFAULT NULL COMMENT '实际价格',
   `introduction` text COMMENT '具体介绍 - 对外公开的信息',
   `total_num` int(11) NULL DEFAULT NULL COMMENT '容量上限',
-  `selected_num` int(11) NULL DEFAULT NULL COMMENT '已选人数',
+  `selected_num` int(11) NOT NULL DEFAULT 0 COMMENT '已选人数',
   `comment` text COMMENT '对教学班的说明 - 仅对内可见',
   `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除状态 0: 正常 1: 已被删除',
   `is_lock` tinyint(1) NOT NULL DEFAULT 0 COMMENT '教学班状态 0: 正常 1: 不可报名',
@@ -161,6 +161,7 @@ CREATE TABLE `{pre}class_student`  (
   `class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
   `student_id` int(11) UNSIGNED NOT NULL COMMENT '学生id',
   PRIMARY KEY (`id`),
+  UNIQUE INDEX `class_id_and_student_id` (`class_id`, `student_id`),
   INDEX `class_id` (`class_id`),
   INDEX `student_id` (`student_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教学班与学生关系表';
@@ -177,6 +178,7 @@ CREATE TABLE `{pre}class_teacher`  (
   `class_id` int(11) UNSIGNED NOT NULL COMMENT '课程id',
   `teacher_id` int(11) UNSIGNED NOT NULL COMMENT '教师id',
   PRIMARY KEY (`id`),
+  UNIQUE INDEX `class_id_and_teacher_id` (`class_id`, `teacher_id`),
   INDEX `class_id` (`class_id`),
   INDEX `teacher_id` (`teacher_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT = '教学班和老师的关系表';
@@ -237,76 +239,12 @@ CREATE TABLE `{pre}plugin` (
 -- 建立外键关系
 --
 
-ALTER TABLE `{pre}student` ADD foreign key(user_id) references `{pre}user`(id) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE `{pre}teacher` ADD foreign key(user_id) references `{pre}user`(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
+ALTER TABLE `{pre}student` ADD FOREIGN KEY(user_id) REFERENCES `{pre}user`(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `{pre}teacher` ADD FOREIGN KEY(user_id) REFERENCES `{pre}user`(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `{pre}class_student` ADD FOREIGN KEY (`class_id`) REFERENCES `{pre}teaching_class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `{pre}class_student` ADD FOREIGN KEY (`student_id`) REFERENCES `{pre}student` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `{pre}class_teacher` ADD FOREIGN KEY (`class_id`) REFERENCES `{pre}teaching_class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `{pre}class_teacher` ADD FOREIGN KEY (`teacher_id`) REFERENCES `{pre}teacher` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `{pre}register` ADD FOREIGN KEY (`class_id`) REFERENCES `{pre}teaching_class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `{pre}register` ADD FOREIGN KEY (`student_id`) REFERENCES `{pre}student` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 -- --------------------------------------------------------
-
---
--- 插入测试数据
---
-
--- ----------------------------
--- Records of {pre}course
--- ----------------------------
-INSERT INTO `{pre}course` VALUES (1, '高等代数', 500.00, '这是一门挂了很多人的科目', 0, 0);
-INSERT INTO `{pre}course` VALUES (2, '离散数学', 100.00, '这是一门没什么卵用的科目', 0, 0);
-INSERT INTO `{pre}course` VALUES (3, '数学建模', 400.00, '这是一门爆肝的科目', 0, 0);
-
--- ----------------------------
--- Records of {pre}teaching_class
--- ----------------------------
-INSERT INTO `{pre}teaching_class` VALUES (1, 1, '', NULL, NULL, 40, 30, '', 0, 0);
-INSERT INTO `{pre}teaching_class` VALUES (2, 1, '', NULL, NULL, 40, 30, '上本课是进阶课程', 0, 0);
-INSERT INTO `{pre}teaching_class` VALUES (3, 2, '该节课名字被修改', 50.50, '该节课简介被修改', NULL, NULL, NULL, 0, 0);
-INSERT INTO `{pre}teaching_class` VALUES (4, 3, '', NULL, '该节课被删除', NULL, NULL, NULL, 1, 0);
-
--- ----------------------------
--- Records of {pre}user
--- ----------------------------
-INSERT INTO `{pre}user` VALUES (1, '13336150000', 0, 0, 0, '2018-07-24 01:27:37', NULL);
-INSERT INTO `{pre}user` VALUES (2, '13336150001', 0, 0, 0, '2018-07-24 01:29:58', NULL);
-INSERT INTO `{pre}user` VALUES (3, '13336150002', 0, 0, 0, '2018-07-24 01:32:34', NULL);
-INSERT INTO `{pre}user` VALUES (4, '13336150003', 0, 0, 0, '2018-07-24 01:36:55', NULL);
-INSERT INTO `{pre}user` VALUES (5, '13336150004', 0, 0, 0, '2018-07-24 01:39:28', NULL);
-INSERT INTO `{pre}user` VALUES (6, '18936150004', 0, 0, 0, '2018-07-24 01:44:39', NULL);
-INSERT INTO `{pre}user` VALUES (7, '18936150001', 0, 0, 0, '2018-07-24 01:45:38', NULL);
-INSERT INTO `{pre}user` VALUES (8, '18936150002', 0, 0, 0, '2018-07-24 01:47:29', NULL);
-
--- ----------------------------
--- Records of {pre}student
--- ----------------------------
-INSERT INTO `{pre}student` VALUES (1, '王建柏', '13336150000', NULL, '13336150000', 0, NULL, '高一');
-INSERT INTO `{pre}student` VALUES (2, '张博远', NULL, '', NULL, 1, NULL, '初三');
-INSERT INTO `{pre}student` VALUES (3, '小江', NULL, '四川', NULL, 0, NULL, '高三');
-INSERT INTO `{pre}student` VALUES (4, '小英', NULL, '', 'None', 1, NULL, '大三');
-INSERT INTO `{pre}student` VALUES (5, '小李', NULL, '', 'None', 0, '1998-10-23', '大二');
-
--- ----------------------------
--- Records of {pre}teacher
--- ----------------------------
-INSERT INTO `{pre}teacher` VALUES (6, '李老师', 0, '', NULL, '', '这是一位负责人的老师');
-INSERT INTO `{pre}teacher` VALUES (7, '裘老师', 0, '123456789@gmail.com', NULL, '', NULL);
-INSERT INTO `{pre}teacher` VALUES (8, '杨老师', 0, '', '172655165', '', '');
-
--- ----------------------------
--- Records of {pre}class_student
--- ----------------------------
-INSERT INTO `{pre}class_student` VALUES (1, 1, 1);
-INSERT INTO `{pre}class_student` VALUES (2, 1, 2);
-INSERT INTO `{pre}class_student` VALUES (3, 1, 3);
-INSERT INTO `{pre}class_student` VALUES (4, 1, 4);
-INSERT INTO `{pre}class_student` VALUES (5, 1, 5);
-INSERT INTO `{pre}class_student` VALUES (6, 2, 1);
-INSERT INTO `{pre}class_student` VALUES (7, 2, 3);
-INSERT INTO `{pre}class_student` VALUES (8, 3, 1);
-INSERT INTO `{pre}class_student` VALUES (9, 3, 5);
-INSERT INTO `{pre}class_student` VALUES (10, 4, 1);
-
--- ----------------------------
--- Records of {pre}class_teacher
--- ----------------------------
-INSERT INTO `{pre}class_teacher` VALUES (1, 1, 6);
-INSERT INTO `{pre}class_teacher` VALUES (2, 1, 8);
-INSERT INTO `{pre}class_teacher` VALUES (3, 2, 8);
-INSERT INTO `{pre}class_teacher` VALUES (4, 3, 7);

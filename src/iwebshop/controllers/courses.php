@@ -32,7 +32,7 @@ class Courses extends IController
 		$id = IFilter::act(IReq::get('id'), 'int');
 		$name = IFilter::act(IReq::get('name'));
 		$price = IFilter::act(IReq::get('price'), 'float');
-		$introduction = IFilter::act(IReq::get('introduction'));
+		$introduction = IReq::get('introduction');
 		$is_lock = IFilter::act(IReq::get('is_lock'), 'int');
 		//创建课程对象
         $courseDB = new IModel('course');
@@ -90,7 +90,17 @@ class Courses extends IController
         $query->page   = $page;
         $this->query   = $query;
         $this->redirect('recycling');
-    }
+	}
+	
+	function introduction()
+	{
+		$id = IFilter::act(IReq::get('id'), 'int');
+		if(!$id) IError::show(403);
+		$courseDB = new IModel('course');
+		$course = $courseDB->getObj('id = '.$id);
+		if(!$course) IError::show(404, '无法找到该信息');
+		echo $course['introduction'];
+	}
 
     function course_reclaim()
 	{

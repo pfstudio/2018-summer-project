@@ -1,0 +1,77 @@
+<div class="content">
+  <table class="table list-table">
+    <colgroup>
+      <col width="35px" />
+      <col width="150px" />
+      <col />
+      <col width="50px" />
+      <col width="100px" />
+      <col width="100px" />
+      <col width="100px" />
+    </colgroup>
+    <caption>
+      <a class="btn btn-default" onclick="selectAll('check[]')">
+        <i class="fa fa-check"></i>全选
+      </a>
+
+      <form name="searchteacher" action="{url:/}" method="get" class="pull-right form-inline" style="margin:0">
+        <input type='hidden' name='controller' value='teachers' />
+        <input type='hidden' name='action' value='teacher_search' />
+        <select class="form-control" name="search">
+          <option value="t.name">姓名</option>
+          <option value="u.phone">手机</option>
+          <option value="t.email">邮箱</option>
+        </select>
+        <input class="form-control" name="keywords" type="text" value="{$keywords}" />
+        <button class="btn btn-default" type="submit">
+          <i class="fa fa-search"></i>搜 索
+        </button>
+      </form>
+    </caption>
+    <thead>
+      <tr>
+        <th></th>
+        <th>照片</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>电话</th>
+        <th>邮箱</th>
+        <th>微信</th>
+      </tr>
+    </thead>
+    <form action="" method="post" name="teacherForm" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+      <tbody>
+        {foreach:items=$this->query->find()}
+        <tr>
+          <td>
+            <input name="check[]" type="checkbox" value="{$item['id']}" />
+          </td>
+          <td>
+            {if:isset($item['photo']) && $item['photo']}
+            <img src="{$item['photo']}" alt="{$item['photo']}" style="width:150px;border:1px solid #ccc" />
+            {else:}
+            <i class="fa fa-photo"></i>暂无照片
+            {/if}
+          </td>
+          <td>{$item['name']}</td>
+          <td>{if:$item['sex']==0}男{else:}女{/if}</td>
+          <td>{$item['phone']}</td>
+          <td>{$item['email']}</td>
+          <td>{$item['wechat']}</td>
+        </tr>
+        {/foreach}
+      </tbody>
+    </form>
+  </table>
+</div>
+{$this->query->getPageBar()}
+
+<script language="javascript">
+  //预加载
+  $(function () {
+    var formObj = new Form('searchteacher');
+    formObj.init({
+      'search': '{$search}'
+    });
+  })
+</script>

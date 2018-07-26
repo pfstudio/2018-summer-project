@@ -17,15 +17,16 @@ class Menu
 				'/courses/course_edit' => '课程添加'
 			),
 			'教学班管理' => array(
-				'/classes/class_list'  => '教学班列表',
-				'/classes/class_edit'  => '教学班添加'
+				'/classes/class_list'     => '教学班列表',
+				'/classes/class_edit'     => '教学班添加',
+				'/classes/class_register' => '班级报名'
 			)
 		),
 
 		'用户'=>array(
 			'学生管理'=>array(
-	    		'/students/student_list' 	=> '学生列表',
-	     		'/students/student_edit' 	=> '添加学生'
+	    		'/students/student_list' => '学生列表',
+	     		'/students/student_edit' => '添加学生'
 			),
 			'教师管理' => array(
 				'/teachers/teacher_list' => '教师列表',
@@ -36,20 +37,7 @@ class Menu
         '系统'=>array(
     		'后台首页'=>array(
     			'/system/default' => '首页',
-    		),
-        	'网站管理'=>array(
-        		'/system/conf_base' => '网站设置',
-        		'/system/conf_guide' => '网站导航',
-        		'/system/conf_banner' => '首页幻灯图',
-        		'/system/conf_ui/type/site'   => '网站前台主题',
-        		'/system/conf_ui/type/system'   => '后台管理主题',
-        		'/system/conf_ui/type/seller'   => '商家管理主题',
-            ),
-        	'权限管理'=>array(
-        		'/system/admin_list' => '管理员',
-        		'/system/role_list'  => '角色',
-        		'/system/right_list' => '权限资源'
-        	),
+    		)
 		)
 	);
 

@@ -2,12 +2,12 @@
   <ul class="breadcrumb">
     <li>
       <i class="home-icon fa fa-home"></i>
-      <a href="#">用户</a>
+      <a href="#">课程</a>
     </li>
     <li>
-      <a href="#">学生管理</a>
+      <a href="#">教学班管理</a>
     </li>
-    <li class="active">学生列表</li>
+    <li class="active">班级学生</li>
   </ul>
 </div>
 
@@ -16,28 +16,24 @@
     <colgroup>
       <col width="35px" />
       <col width="100px" />
-      <col width="50px" />
       <col width="100px" />
       <col width="100px" />
       <col width="100px" />
       <col width="100px" />
       <col width="100px" />
       <col />
-      <col width="50px" />
+      <col width="100px" />
       <col width="200px" />
     </colgroup>
     <caption>
-      <a class="btn btn-default" href='{url:/students/student_edit}'>
+      <a class="btn btn-default" onclick="addStudents({$class['id']})">
         <i class="fa fa-plus"></i>添加学生
       </a>
       <a class="btn btn-default" onclick="selectAll('check[]')">
         <i class="fa fa-check"></i>全选
       </a>
-      <a class="btn btn-default" onclick="delModel({'form':'student_list',msg:'确定要删除所选中的学生吗？<br />删除的学生可以从回收站找回。'})">
+      <a class="btn btn-default" onclick="delModel({'form':'class_list',msg:'确定要移除所选中的学生吗？'})">
         <i class="fa fa-close"></i>批量删除
-      </a>
-      <a class="btn btn-default" href='{url:/students/recycling}'>
-        <i class="fa fa-trash"></i>回收站
       </a>
     </caption>
     <thead>
@@ -48,17 +44,15 @@
         <th>电话</th>
         <th>家长电话</th>
         <th>年级</th>
-        <th>生日</th>
         <th>微信</th>
         <th>地址</th>
-        <th>状态</th>
+        <th>生日</th>
         <th></th>
       </tr>
     </thead>
     <!-- 用于全部删除 -->
-    <form action="{url:/users/user_reclaim}" method="post" name="student_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
-      <!-- 标志返回页面 -->
-      <input name="callback" value="student" hidden />
+    <form action="{url:/classes/remove_students}" method="post" name="class_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+      <input name="id" value="{$class['id']}" hidden />
       <tbody>
         {foreach:items=$this->query->find()}
         <tr>
@@ -70,24 +64,11 @@
           <td>{$item['phone']}</td>
           <td>{$item['parents_phone']}</td>
           <td>{$item['grade']}</td>
-          <td>{$item['birthday']}</td>
           <td>{$item['wechat']}</td>
           <td>{$item['address']}</td>
-          <td>{if:$item['is_lock']=='0'}正常{else:}锁定{/if}</td>
+          <td>{$item['birthday']}</td>
           <td>
-            {if:$item['is_lock']=='0'}
-            <a href="{url:/users/user_lock/id/$item['id']/callback/student}" title="锁定">
-              <i class='operator fa fa-lock'></i>
-            </a>
-            {else:}
-            <a href="{url:/users/user_unlock/id/$item['id']/callback/student}" title="解锁">
-              <i class='operator fa fa-unlock'></i>
-            </a>
-            {/if}
-            <a href="{url:/students/student_edit/id/$item['id']}" title="编辑">
-              <i class='operator fa fa-edit'></i>
-            </a>
-            <a onclick="delModel({link:'{url:/users/user_reclaim/check/$item['id']/callback/student}'})" title="删除">
+            <a onclick="delModel({link:'{url:/classes/remove_students/id/$class['id']/check/$item['id']}'})" title="删除">
               <i class='operator fa fa-close'></i>
             </a>
           </td>
@@ -98,3 +79,23 @@
   </table>
 </div>
 {$this->query->getPageBar()}
+<script>
+  function addStudents(id) {
+    art.dialog.open('{url:/students/student_search}', {
+      'id': 'search',
+      'title': '添加学生',
+      'width': '790px',
+      ok: function (iframeWin, topWin) {
+        let formObject = iframeWin.document.forms['studentForm'];
+        let postData = 'id=' + id + '&' + $(formObject).serialize();
+        $.post('{url:/classes/add_students}', postData,
+          function (res) {
+            if(res.status == 'success')
+              location.reload();
+            else
+              alert(res.error.join('|'));
+          });
+      }
+    });
+  }
+</script>

@@ -1,1 +1,107 @@
-<h1>student_edit</h1>
+{js:my97date}
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li>
+      <i class="home-icon fa fa-home"></i>
+      <a href="#">用户</a>
+    </li>
+    <li>
+      <a href="#">学生管理</a>
+    </li>
+    <li class="active">编辑学生</li>
+  </ul>
+</div>
+<div class="content">
+  <form action="{url:/students/student_save}" method="post" name="studentForm">
+    <input name="id" value="" type="hidden" />
+    <table class="table form-table">
+      <colgroup>
+        <col width="130px" />
+        <col />
+      </colgroup>
+
+      <tbody>
+        <tr>
+          <th>姓名：</th>
+          <td>
+            <input class="form-control" name="name" type="text" value="" pattern="required" placeholder="学生姓名" />
+          </td>
+        </tr>
+        <tr>
+          <th>状态：</th>
+          <td>
+            <label class="radio-inline">
+                <input type="radio" name="is_lock" value="0" checked>正常
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="is_lock" value="1">锁定
+              </label>
+          </td>
+        </tr>
+        <tr>
+          <th>性别：</th>
+          <td>
+            <label class="radio-inline">
+                <input type="radio" name="sex" value="0" checked>男
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="sex" value="1">女
+              </label>
+          </td>
+        </tr>
+        <tr>
+          <th>电话：</th>
+          <td>
+              <input class="form-control" name="phone" type="text" value="" empty pattern="mobi" placeholder="手机号码" />
+          </td>
+        </tr>
+        <tr>
+          <th>家长电话：</th>
+          <td>
+              <input class="form-control" name="parents_phone" type="text" value="" empty pattern="mobi" placeholder="家长电话" />
+          </td>
+        </tr>
+        <tr>
+          <th>年级：</th>
+          <td>
+            <select class="form-control" id="grade" name="grade">
+              {if:!isset($student['grade'])}<option value="" style="display: none;" selected>请选择年级</option>{/if}
+              {foreach:items=Util::getGrades()}
+              <option value="{$item}" {if:isset($student['grade']) && $item==$student['grade']}selected{/if}>{$item}</option>
+              {/foreach}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>生日：</th>
+          <td>
+            <input class="form-control" type="text" name="birthday" onfocus="WdatePicker()" value="" placeholder="yyyy-mm-dd">
+          </td>
+        </tr>
+        <tr>
+          <th>微信：</th>
+          <td>
+              <input class="form-control" type="text" name="wechat" value="" placeholder="微信号/手机号">
+          </td>
+        </tr>
+        <tr>
+          <th>地址：</th>
+          <td>
+              <input class="form-control" type="text" name="address" value="" placeholder="联系地址">
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <button class='btn btn-primary' type="submit">确 定</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+<script>
+  // 设置默认数据
+  var formObj = new Form('studentForm');
+  formObj.init({echo:JSON::encode($student)});
+</script>

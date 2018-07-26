@@ -1,0 +1,97 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li>
+      <i class="home-icon fa fa-home"></i>
+      <a href="#">用户</a>
+    </li>
+    <li>
+      <a href="#">教师管理</a>
+    </li>
+    <li class="active">已删除教师</li>
+  </ul>
+</div>
+
+<form action="" method="post" name="teacher_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+  <input name="callback" value="teacher" hidden />
+  <div class="content">
+    <table class="table">
+      <colgroup>
+        <col width="35px" />
+        <col width="150px" />
+        <col width="100px" />
+        <col width="100px" />
+        <col width="100px" />
+        <col />
+        <col width="100px" />
+        <col width="200px" />
+      </colgroup>
+      <caption>
+        <a class="btn btn-default" href='{url:/teachers/teacher_list}'>
+          <i class="fa fa-reply"></i>返回列表
+        </a>
+        <a class="btn btn-default" onclick="selectAll('check[]')">
+          <i class="fa fa-check"></i>全选
+        </a>
+        <a class="btn btn-default" onclick="teacher_restore()">
+          <i class="fa fa-recycle"></i>还原
+        </a>
+        <a class="btn btn-default" onclick="teacher_del()">
+          <i class="fa fa-close"></i>永久删除
+        </a>
+      </caption>
+      <thead>
+        <tr>
+          <th></th>
+          <th>照片</th>
+          <th>姓名</th>
+          <th>性别</th>
+          <th>电话</th>
+          <th>邮箱</th>
+          <th>微信</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {foreach:items=$this->query->find()}
+        <tr>
+          <td>
+            <input name="check[]" type="checkbox" value="{$item['id']}" />
+          </td>
+          <td>
+            <img src="{$item['photo']}" alt="照片" />
+          </td>
+          <td title="{echo:htmlspecialchars($item['name'])}">{$item['name']}</td>
+          <td>{if:$item['sex']==0}男{else:}女{/if}</td>
+          <td>{$item['phone']}</td>
+          <td>{$item['email']}</td>
+          <td>{$item['wechat']}</td>
+          <td>{$item['introduction']}</td>
+          <td>{if:$item['is_lock']=='0'}正常{else:}锁定{/if}</td>
+          <td>
+            <a href="{url:/users/user_restore/check/$item['id']/callback/teacher}" title="恢复">
+              <i class='operator fa fa-reply'></i>
+            </a>
+            <a href="{url:/users/user_del/check/$item['id']/callback/teacher}" title="彻底删除">
+              <i class='operator fa fa-close'></i>
+            </a>
+          </td>
+        </tr>
+        {/foreach}
+      </tbody>
+    </table>
+  </div>
+  {$this->query->getPageBar()}
+</form>
+
+<script language="javascript">
+  function teacher_del() {
+    $("form[name='teacher_list']").attr('action', '{url:/users/user_del}');
+    confirm('确定要删除所选中的教师吗？<br />删除的教师不可以找回。', 'formSubmit(\'teacher_list\')');
+  }
+
+  function teacher_restore() {
+    $("form[name='teacher_list']").attr('action', '{url:/users/user_restore}');
+    confirm('确定要还原所选中的教师吗？', 'formSubmit(\'teacher_list\')');
+  }
+</script>

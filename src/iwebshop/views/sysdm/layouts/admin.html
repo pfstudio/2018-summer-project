@@ -102,12 +102,20 @@
     </div>
 </body>
 <script type='text/javascript'>
+var icoConfig = {'课程管理': 'fa-book', '教学班管理': 'fa-calendar', '学生管理': 'fa-graduation-cap', '教师管理': 'fa-users'}
 //图标配置
 $('i[name="ico"]').each(function()
 {
 	var menuName = $(this).attr('menu');
-    //默认图标
-    $(this).addClass("fa-circle");
+	if(menuName && icoConfig[menuName])
+	{
+		$(this).addClass(icoConfig[menuName]);
+	}
+	else
+	{
+		//默认图标
+		$(this).addClass("fa-circle");
+	}
 });
 
 //兼容IE系列
